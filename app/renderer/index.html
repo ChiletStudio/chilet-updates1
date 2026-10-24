@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data: chilet:; media-src 'self' chilet:">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chilet Studio 2.4.1</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="intro" class="splash intro">
+    <img id="introLogo" class="splash-logo" src="assets/logo.png" alt="">
+    <h1 class="wordmark splash-name"><span class="w1">CHILET</span><span class="w2">STUDIO</span></h1>
+  </div>
+  <div id="splash" class="splash wait">
+    <img id="splashLogo" class="splash-logo" src="assets/logo.png" alt="">
+    <h1 class="wordmark splash-name"><span class="w1">CHILET</span><span class="w2">STUDIO</span></h1>
+    <div class="splash-bar"><i></i></div>
+  </div>
+  <aside class="rail">
+    <div class="rail-top">
+      <button id="btnHome" class="rail-btn home-btn active" title="Inicio"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></button>
+      <div id="railPacks" class="rail-packs"></div>
+      <button id="btnSocial" class="rail-btn" title="Social: amigos"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14.4c2.6.2 4.5 2 4.5 4.6"/></svg></button>
+      <button id="btnEvents" class="rail-btn" title="Eventos"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button>
+      <button id="btnProfile" class="rail-btn" title="Perfil"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.7"/><path d="M4.5 20c.6-3.8 3.7-6 7.5-6s6.9 2.2 7.5 6"/></svg></button>
+      <button id="btnCreate" class="rail-btn" title="Crear modpack"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+    <div class="rail-bottom">
+      <button id="btnConsole" class="rail-btn" title="Consola"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-5-6-5"/><path d="M12 19h8"/></svg></button>
+      <button id="btnSettings" class="avatar" title="Ajustes y cuenta"><span id="avatarLetter">?</span><canvas id="avatarSkin" width="8" height="8" class="hidden"></canvas></button>
+    </div>
+  </aside>
+
+  <main id="stage">
+    <div class="bg"></div>
+    <div class="fog fog1"></div><div class="fog fog2"></div>
+    <div class="vignette"></div>
+
+    <div class="page">
+      <div id="hero" class="hero"><div id="heroMedia" class="hero-media"></div><div class="hero-fade"></div><button id="heroBack" class="hero-back" type="button">&#8592; Volver</button></div>
+      <div class="topbar">
+        <img id="logo" src="assets/logo.png" alt="Chilet Studio">
+        <h1 id="wordmark" class="wordmark"><span class="w1">CHILET</span><span class="w2">STUDIO</span></h1>
+      </div>
+      <div class="top-tools">
+        <button id="btnMore" class="chip round" type="button" title="Más opciones del modpack">&#8943;</button>
+        <div class="tools">
+          <button id="btnDetails" class="chip" type="button" title="Ver la información del modpack">Detalles</button>
+          <button id="btnFolder" class="chip" title="Abrir la carpeta de este modpack (mods, mundos)">Carpeta</button>
+          <button id="btnMods" class="chip" title="Descarga FancyMenu, Drippy Loading Screen y sus librerías en la carpeta mods de este modpack">Mods de menú</button>
+          <button id="btnEdit" class="chip" title="Cambiar nombre y servidor de este modpack">Editar</button>
+          <button id="btnIcon" class="chip" title="Cambiar la foto del modpack: PNG, JPG, GIF, WEBP o video MP4/WEBM (los animados se mueven)">Cambiar foto</button>
+          <button id="btnLogo" class="chip" title="Poner el logo del modpack en el centro de la pantalla: PNG con fondo transparente">Cambiar logo</button>
+          <button id="btnBanner" class="chip" title="Cambiar la portada grande: imagen, GIF o video MP4/WEBM">Cambiar portada</button>
+          <button id="btnRemove" class="chip danger" title="Quitar este modpack de la lista (no borra su carpeta)">Quitar</button>
+        </div>
+        <div id="rate" class="rate hidden">
+          <button id="likeUp" class="rate-btn" type="button" title="Me gusta"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11v9H4v-9zM7 11l4-7c1.6 0 2.5 1.3 2.2 2.8L12.8 10H19a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 17.8 20H7"/></svg></button>
+          <span id="ratePct" class="rate-pct">—</span>
+          <button id="likeDown" class="rate-btn" type="button" title="No me gusta"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13V4H4v9zM7 13l4 7c1.6 0 2.5-1.3 2.2-2.8L12.8 14H19a2 2 0 0 0 2-2.3l-1.2-6A2 2 0 0 0 17.8 4H7"/></svg></button>
+        </div>
+      </div>
+      <div id="heroTitle" class="hero-title"></div>
+      <div id="launchCard" class="launch-card">
+        <div class="lc-main">
+          <div id="topName" class="top-name"></div>
+          <div id="profileMeta" class="meta"></div>
+          <div id="progressBox" class="progress-box hidden">
+        <div id="progressText" class="progress-text"></div>
+        <div class="progress"><div id="progressBar"></div></div>
+        <div class="progress thin"></div>
+        <span id="lcTime" class="lc-time"></span>
+      </div>
+          <div class="lc-btns">
+            <button id="play">Jugar</button>
+            <button id="playOffline" class="ghost" title="Sin cuenta de Microsoft: juegas con el nombre de abajo">Jugador no premium</button>
+            <button id="cardPublish" class="primary" type="button" title="Sube el modpack y el código del launcher firmado, para que les llegue a todos los jugadores">PUBLICAR ACTUALIZACIÓN</button>
+            <span id="installed" class="installed">Listo</span>
+          </div>
+        </div>
+        <div id="packIcon" class="pk-icon lc-thumb"></div>
+      </div>
+      <nav class="tabs"><button class="tab on" data-tab="det" type="button">DETALLES</button></nav>
+      <section id="tab-det" class="tabpane"><div class="sec-title">INFORMACIÓN</div><div id="infoRows"></div></section>
+      <footer class="foot">
+        <div class="dock-sub"><span id="accountLine"></span><button id="login" class="link">Iniciar sesión</button></div>
+        <div class="offline-row"><label for="offlineQuick">Nombre de jugador no premium</label><input id="offlineQuick" maxlength="16" placeholder="Tu nombre" spellcheck="false"></div>
+        <div id="status" class="status">Listo.</div>
+        <img id="logoBottom" class="logo-bottom" src="assets/logo.png" alt="Chilet Studio">
+      </footer>
+    </div>
+    <section id="home" class="home">
+      <div id="homeBrand" class="home-brand"><img id="homeLogo" src="assets/logo.png" alt=""><h1 class="home-name"><b>CHILET</b> <span>STUDIO</span></h1></div>
+      <div class="home-head">
+        <div><h2>Inicio</h2><div class="home-sub">Amigos</div></div>
+        <input id="homeSearch" class="search" placeholder="Buscar…" spellcheck="false">
+      </div>
+      <div id="homeFriends" class="home-friends"></div>
+      <div class="home-sec">CONTINUAR JUGANDO</div>
+      <div id="homeContinue" class="cards"></div>
+      <div class="home-sec alt">TUS MODPACKS</div>
+      <div id="homeAll" class="cards"></div>
+    </section>
+    <section id="modsPage" class="mods-page hidden">
+      <div class="mods-head"><button id="modsBack" class="back" type="button" title="Volver">&#8592;</button><h2 id="modsTitle">Mods</h2></div>
+      <div id="modsPanel" class="mods-panel"></div>
+    </section>
+    <section id="social" class="home hidden">
+      <div id="socialLocal">
+      <div class="home-head">
+        <div><h2>Social</h2><div class="home-sub">Amigos</div></div>
+        <div class="friend-add"><input id="friendName" class="search" placeholder="Nombre de Minecraft…" maxlength="16" spellcheck="false" autocomplete="off"><button id="friendAdd" class="primary" type="button">Agregar</button></div>
+      </div>
+      <div id="friendMsg" class="friend-msg"></div>
+      <div class="home-sec">AMIGOS <span id="friendCount" class="friend-count"></span></div>
+      <div id="friendList" class="friends"></div>
+      </div>
+      <div id="socialChat" class="chat hidden">
+        <div class="home-head"><div><h2>Social</h2><div class="home-sub">Chat con tus amigos</div></div></div>
+        <div class="chat-body">
+          <aside class="chat-side">
+            <div class="friend-add"><input id="cfName" class="search" placeholder="Nombre de Minecraft…" maxlength="16" spellcheck="false" autocomplete="off"><button id="cfAdd" class="primary" type="button">Agregar</button></div>
+            <div id="cfMsg" class="friend-msg"></div>
+            <div id="cfReq"></div>
+            <div id="cfList" class="chat-friends"></div>
+          </aside>
+          <div class="chat-main">
+            <div id="chatHead" class="chat-head">Elige un amigo para chatear</div>
+            <div id="chatLog" class="chat-log"></div>
+            <div class="chat-send"><input id="chatInput" class="search" placeholder="Escribe un mensaje…" maxlength="500" disabled autocomplete="off"><button id="chatSend" class="primary" type="button" disabled>Enviar</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="events" class="home hidden">
+      <div class="home-head"><div><h2>Eventos</h2><div class="home-sub">Próximos eventos</div></div><button id="evNew" class="primary hidden" type="button">Nuevo evento</button></div>
+      <div id="evForm" class="ev-form hidden">
+        <input id="evTitle" class="search" placeholder="Título del evento" maxlength="80" autocomplete="off">
+        <input id="evDate" class="search" type="datetime-local">
+        <textarea id="evDesc" class="search" placeholder="Descripción (opcional)" maxlength="400" rows="2"></textarea>
+        <div class="ev-form-btns"><button id="evSave" class="primary" type="button">Guardar evento</button><button id="evCancel" class="secondary" type="button">Cancelar</button></div>
+      </div>
+      <div id="evList" class="ev-list"></div>
+    </section>
+    <section id="profile" class="home hidden">
+      <div class="home-head"><div class="prof-id"><div id="profFace" class="friend-face big"></div><div><h2 id="profName"></h2><div id="profSub" class="home-sub"></div></div></div></div>
+      <div class="prof-stats">
+        <div><b id="statHours">0</b><span>Tiempo jugado</span></div><div><b id="statPlays">0</b><span>Partidas</span></div>
+        <div><b id="statPacks">0</b><span>Modpacks jugados</span></div><div><b id="statFriends">0</b><span>Amigos</span></div>
+      </div>
+      <div class="home-sec">JUEGOS QUE HAS JUGADO</div>
+      <div id="profGames" class="games"></div>
+    </section>
+    <div class="ver">v2.4.3</div>
+
+    <section id="sheet" class="sheet hidden">
+      <div class="sheet-card">
+        <header class="sheet-head"><h2 id="sheetTitle"></h2><button id="sheetClose" class="x" title="Cerrar">✕</button></header>
+
+        <div id="sheet-create" class="sheet-body create hidden">
+          <div class="cr-left">
+            <label class="fld">Nombre<input id="newName" maxlength="40" placeholder="Mi modpack"></label>
+            <div class="fld">Cargador
+              <div class="seg"><button id="ldForge" class="on" type="button">Forge</button><button id="ldFabric" type="button">Fabric</button><button id="ldVanilla" type="button">Vanilla</button></div>
+            </div>
+            <label id="forgeRow" class="fld">Versión de Forge<select id="newForge"></select></label>
+            <label class="fld">Servidor directo (opcional)<input id="newServer" placeholder="play.miservidor.com"></label>
+            <button id="createPack" class="primary cta" type="button">Crear modpack</button>
+            <div id="createMsg" class="cr-msg"></div>
+          </div>
+          <div class="cr-right">
+            <div class="fld">Versión de Minecraft <span id="mcCount" class="muted"></span>
+              <input id="mcSearch" placeholder="Buscar versión (ej: 1.20)" spellcheck="false">
+            </div>
+            <div id="mcList" class="mc-list"></div>
+            <small class="hint"><span class="legend-dot"></span> naranja = tiene Forge. Solo versiones estables (sin snapshots).</small>
+          </div>
+        </div>
+
+        <div id="sheet-unlock" class="sheet-body hidden">
+          <p id="unlockMsg" class="note"></p>
+          <div class="form-row">
+            <label>Contraseña<input id="unlockPw" type="password" maxlength="64" autocomplete="off"></label>
+            <button id="unlockBtn" class="primary" type="button">Desbloquear</button>
+          </div>
+          <small class="hint">Sin la contraseña se puede jugar y entrar a servidores, pero no crear, editar ni quitar modpacks, mods o fotos.</small>
+        </div>
+
+        <div id="sheet-edit" class="sheet-body hidden">
+          <div class="form-row">
+            <label>Nombre<input id="editName" maxlength="40"></label>
+            <label>Servidor directo (vacío = menú normal)<input id="editServer" placeholder="play.miservidor.com"></label>
+            <button id="saveEdit" class="primary">Guardar</button>
+          </div>
+          <small class="hint">Con servidor directo, al pulsar JUGAR el juego entra solo a ese servidor (se salta el menú principal). Déjalo vacío si quieres mostrar tu menú de FancyMenu.</small>
+          <div class="form-row" style="margin-top:16px">
+            <button id="exportPack" class="secondary">Preparar para compartir</button>
+            <button id="publishPack" class="primary">Publicar actualización</button>
+          </div>
+          <small class="hint">"Publicar actualización" sube tus mods, menú y config a tu GitHub (solo lo que cambió) y todos los jugadores lo reciben solos al abrir el launcher o pulsar Jugar. Si aún no conectaste GitHub, solo crea la carpeta ChiletStudio-Publicar en Documentos.</small>
+          <div class="form-row" style="margin-top:12px">
+            <label>GitHub: usuario<input id="ghUser" maxlength="39" spellcheck="false" autocomplete="off"></label>
+            <label>Repositorio<input id="ghRepo" maxlength="100" spellcheck="false" placeholder="chilet-updates" autocomplete="off"></label>
+            <label>Token (pega uno nuevo para reemplazar el actual)<input id="ghToken" type="password" autocomplete="off" placeholder="pega tu token"></label>
+            <button id="ghSave" class="secondary">Guardar conexión</button>
+          </div>
+          <div class="form-row" style="margin-top:12px">
+            <label>Servidor social (chat y likes)<input id="socialUrl" placeholder="https://tu-servidor.com" spellcheck="false" autocomplete="off"></label>
+            <button id="socialSave" class="secondary">Guardar servidor social</button>
+          </div>
+          <small class="hint">Instrucciones en server/LEEME.txt. Al pulsar "Publicar actualización", esta dirección les llega a todos los jugadores.</small>
+          <small class="hint">El token se guarda cifrado en tu PC. Cómo crearlo: mira COMPARTIR.txt, sección "PUBLICAR CON UN CLIC".</small>
+          <small class="hint">Copia los mods, la config y tus menús de este modpack a la carpeta "modpack" del launcher. Después usa Crear_EXE.bat y comparte la carpeta resultante (ver COMPARTIR.txt).</small>
+        </div>
+
+        <div id="sheet-console" class="sheet-body hidden">
+          <div class="form-row"><span class="grow"></span><button id="clearConsole" class="secondary">Limpiar</button></div>
+          <pre id="console"></pre>
+        </div>
+
+        <div id="sheet-settings" class="sheet-body hidden">
+          <div class="panel">
+            <h3>Cuenta</h3>
+            <div id="accountInfo" class="note"></div>
+            <div class="form-row">
+              <button id="settingsLogin" class="secondary">Iniciar sesión</button>
+              <button id="logout" class="secondary">Cerrar sesión</button>
+              <label>Ventana de inicio de sesión
+                <select id="loginMode">
+                  <option value="electron">Ventana de la app</option>
+                  <option value="raw">Navegador del sistema</option>
+                </select>
+              </label>
+              <label>Nombre de jugador no premium<input id="offlineName" maxlength="16"></label>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Rendimiento</h3>
+            <label class="row">Memoria máxima para Minecraft: <b id="ramValue"></b> GB
+              <input id="ram" type="range" min="1" max="16" step="1">
+            </label>
+            <label class="row check"><input id="fullscreen" type="checkbox"> Abrir Minecraft en pantalla completa</label>
+            <label class="row check"><input id="alwaysOffline" type="checkbox"> Entrar siempre como jugador no premium (sin cuenta de Microsoft)</label>
+          </div>
+          <div class="panel">
+            <h3>Java</h3>
+            <div id="javaInfo" class="note"></div>
+            <div class="form-row">
+              <button id="javaChoose" class="secondary">Elegir java.exe…</button>
+              <button id="javaAuto" class="secondary">Usar automático</button>
+              <button id="javaCheck" class="secondary">Comprobar</button>
+            </div>
+            <small class="hint">Automático: cada modpack usa el Java que necesita su versión de Minecraft (17, 21 o 25). Si no lo encuentra, lo descarga.</small>
+          </div>
+          <div class="panel" id="ownerPanel">
+            <h3>Modo creador</h3>
+            <div id="ownerInfo" class="note"></div>
+            <div class="form-row">
+              <label>Contraseña<input id="ownerPw" type="password" maxlength="64" autocomplete="off"></label>
+              <button id="ownerBtn" class="secondary" type="button">Desbloquear</button>
+              <button id="ownerLock" class="secondary hidden" type="button">Bloquear</button>
+            </div>
+            <small class="hint">Solo con esta contraseña se pueden crear, editar y quitar modpacks, cambiar su foto, abrir su carpeta y gestionar mods. Jugar queda libre para todos.</small>
+          </div>
+          <div class="panel">
+            <h3>Forge y datos</h3>
+            <div class="form-row">
+              <label>Método de instalación de Forge
+                <select id="forgeMode">
+                  <option value="mclc">Automático (ForgeWrapper de la librería)</option>
+                  <option value="installer">Instalador oficial de Forge</option>
+                </select>
+              </label>
+              <button id="openData" class="secondary">Abrir carpeta de datos</button>
+              <button id="repairMc" class="secondary" title="Si Minecraft no abre o dice que faltan archivos de Forge">Reparar Minecraft</button>
+              <button id="restoreApp" class="secondary" type="button" title="Vuelve al launcher que instalaste (borra la actualización descargada)">Restaurar launcher original</button>
+            </div>
+            <small class="hint">Si Forge falla al iniciar con un método, prueba el otro.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="avMenu" class="av-menu hidden"></div>
+  <script src="renderer.js"></script>
+</body>
+</html>
