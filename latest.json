@@ -1,0 +1,638 @@
+{
+ "version": 1792865142,
+ "profile": {
+  "id": "pmuuc8azv",
+  "name": "ChiletSafio",
+  "mc": "1.20.1",
+  "forge": "47.4.26",
+  "server": "",
+  "loader": "",
+  "fabric": ""
+ },
+ "files": [
+  {
+   "p": "mods/betterfpsdist-1.20.1-6.0.jar",
+   "size": 19917,
+   "sha1": "8e4fe2cd85c08c24ab363b47a63d1c872fc3cc1e"
+  },
+  {
+   "p": "mods/cielorojo-67-forge-1.20.1.jar",
+   "size": 31145,
+   "sha1": "f45f3a30da48b9ed8c2dd88395a94cfcf91399ad"
+  },
+  {
+   "p": "mods/connectivity-1.20.1-7.7.jar",
+   "size": 122337,
+   "sha1": "e9426c921b5c3c43ed90bf1d8faea8a307c0bc8d"
+  },
+  {
+   "p": "mods/CullLessLeaves-Reforged-1.20.1-1.0.5.jar",
+   "size": 22474,
+   "sha1": "71b1603071461e036a3ba2aaeeb52cc10fa3d348"
+  },
+  {
+   "p": "mods/cupboard-1.20.1-4.2.jar",
+   "size": 33422,
+   "sha1": "db25dfc4935b7f1bde62c69f13a7b70e2ecd9f2f"
+  },
+  {
+   "p": "mods/CustomPlayerModels-1.20-0.6.27a.jar",
+   "size": 2805930,
+   "sha1": "4652dee093c796799756f5f6c89314c6d601ae65"
+  },
+  {
+   "p": "mods/d3d-1.0.3-forge-1.20.1.jar",
+   "size": 37312626,
+   "sha1": "b74de8b22f7a84f75dc04b968348dfc3b4162124"
+  },
+  {
+   "p": "mods/dedsafio3-0.0.9-forge-1.20.1 (1).jar",
+   "size": 7366550,
+   "sha1": "22a4b7020f7c34d13d4649239f5831df6c6b033b"
+  },
+  {
+   "p": "mods/drippyloadingscreen_forge_3.1.5_MC_1.20.1.jar",
+   "size": 281881,
+   "sha1": "a33d48809db8a2f1eb3667fe140d7a4104d80dca"
+  },
+  {
+   "p": "mods/embeddium-0.3.31+mc1.20.1.jar",
+   "size": 1320675,
+   "sha1": "bb2fa8f3e493af16af9160d049f96c614a1faf2f"
+  },
+  {
+   "p": "mods/explosiveenhancement-1.2.0.jar",
+   "size": 97476,
+   "sha1": "35cf80849ac4b19416cadc12cf10de34295e51f5"
+  },
+  {
+   "p": "mods/fancymenu_forge_3.9.14_MC_1.20.1.jar",
+   "size": 26191988,
+   "sha1": "8916c8f2f12a986365148661fb59650950913b32"
+  },
+  {
+   "p": "mods/fastasyncworldsave-1.20.1-2.6.jar",
+   "size": 14812,
+   "sha1": "3a3180f5fc9d1209ca0ad69084afe8ee42ba44d6"
+  },
+  {
+   "p": "mods/ferritecore-6.0.1-forge.jar",
+   "size": 123034,
+   "sha1": "417fb6ce8f52abf40bd9d0390371790f9576f8ba"
+  },
+  {
+   "p": "mods/FpsReducer2-forge-1.20.1-2.5.1.jar",
+   "size": 125660,
+   "sha1": "4920a2e1d17090007179a568181624847fba0993"
+  },
+  {
+   "p": "mods/geckolib-forge-1.20.1-4.8.4.jar",
+   "size": 1038209,
+   "sha1": "50e1407869ef0e909e3bdda9328b8bd7db03fdc0"
+  },
+  {
+   "p": "mods/Iceberg-1.20.1-forge-1.1.25.jar",
+   "size": 134551,
+   "sha1": "d551ff55814cfb01403b812459ee5a02b020d87b"
+  },
+  {
+   "p": "mods/ImmediatelyFast-Forge-1.5.5+1.20.4.jar",
+   "size": 532063,
+   "sha1": "9eacd407b7dea636d375dc47335d92f616484ea2"
+  },
+  {
+   "p": "mods/immersive_paintings-0.6.13+1.20.1-forge.jar",
+   "size": 4856103,
+   "sha1": "3f2a668f2235a6a908fde545d140013456b5412f"
+  },
+  {
+   "p": "mods/ItemBorders-1.20.1-forge-1.2.2.jar",
+   "size": 20832,
+   "sha1": "cf42466689489348e1e3a5df00d2ce6c65dd978a"
+  },
+  {
+   "p": "mods/jei-1.20.1-forge-15.62.0.219.jar",
+   "size": 2232177,
+   "sha1": "e514cd6bc50b816487d9c25cd457de5e0bd5b07f"
+  },
+  {
+   "p": "mods/konkrete_forge_1.8.0_MC_1.20-1.20.1.jar",
+   "size": 625185,
+   "sha1": "2019d821bed9071daabed43979433a5473ceee49"
+  },
+  {
+   "p": "mods/limitedchunks-1.20.1-4.1.jar",
+   "size": 16405,
+   "sha1": "c6dae9dcdb46b577aba270d3f951291ea235e334"
+  },
+  {
+   "p": "mods/melody_forge_1.0.3_MC_1.20.1-1.20.4.jar",
+   "size": 37178,
+   "sha1": "e0942d396a70c09038e6c2e5e1da6505178249b8"
+  },
+  {
+   "p": "mods/MenuDED3-0.0.0 (1).jar",
+   "size": 869959,
+   "sha1": "c1a8f8a28293c29e1f4ea5480101cf05cb93d020"
+  },
+  {
+   "p": "mods/modmenu-1.0.0-1.20.1.jar",
+   "size": 575552,
+   "sha1": "65cfa00500721482277c745f6eefd28a0190279f"
+  },
+  {
+   "p": "mods/modminds-1.0.7-forge-1.20.1.jar",
+   "size": 6521161,
+   "sha1": "91d3e44ca956b230d44e1ef76f787dba4e9b4351"
+  },
+  {
+   "p": "mods/more_owleaf-1.3.7.jar",
+   "size": 566556,
+   "sha1": "4d88a1dfca02eebe0dfdd35e40c33a5f7b16b19a"
+  },
+  {
+   "p": "mods/morpher-1.0.8.jar",
+   "size": 183388,
+   "sha1": "d50d44fda276efab88634ca8d4da4b5851be1ed3"
+  },
+  {
+   "p": "mods/noisiumed-forge-3.0.6+mc1.20-1.20.1.jar",
+   "size": 218152,
+   "sha1": "34130d62dac472eae1357a1f0d64867a19fd3402"
+  },
+  {
+   "p": "mods/Pehkui-3.8.2+1.20.1-forge.jar",
+   "size": 671605,
+   "sha1": "4bc816efdd8e5e2a97423313674401351710e403"
+  },
+  {
+   "p": "mods/plasmovoice-forge-1.20.1-2.1.17.jar",
+   "size": 12337455,
+   "sha1": "a2bfe43a4c5b5077626d7f0af89fbe9972ba723f"
+  },
+  {
+   "p": "mods/Playback-1.0.3-SNAPSHOT-all (1).jar",
+   "size": 634438,
+   "sha1": "63253a58f003a9f978bdacc16c15c7c59625ab4c"
+  },
+  {
+   "p": "mods/Prism-1.20.1-forge-1.0.5.jar",
+   "size": 52205,
+   "sha1": "bcb4bbb1052f49ed4fe6e7d5d7f91f68d45c3fe3"
+  },
+  {
+   "p": "mods/redirector-5.0.0.jar",
+   "size": 5793,
+   "sha1": "0b246b2648a2e463f243852fdd1ef8c2931da19c"
+  },
+  {
+   "p": "mods/rubidium-extra-0.5.4.4+mc1.20.1-build.131.jar",
+   "size": 568608,
+   "sha1": "bb422d5626bf69841e444a3e545c8e71b6928cf8"
+  },
+  {
+   "p": "mods/smoothchunk-1.20.1-4.1.jar",
+   "size": 14249,
+   "sha1": "3e142e4a2e12db1c9a3777879cc021aff49da088"
+  },
+  {
+   "p": "mods/sodiumdynamiclights-forge-1.0.10-1.20.1.jar",
+   "size": 511601,
+   "sha1": "d27524e85bed0f0af83c03be46f9ca3eb02a1be9"
+  },
+  {
+   "p": "mods/sodiumextras-forge-1.0.7-1.20.1.jar",
+   "size": 438540,
+   "sha1": "7603f44bc4750774fbbdc07a3153c391650fcf3d"
+  },
+  {
+   "p": "mods/sodiumoptionsapi-forge-1.0.10-1.20.1.jar",
+   "size": 443978,
+   "sha1": "7529fbf938787ed13a251cbf40936f8c29ec4b6c"
+  },
+  {
+   "p": "mods/sodiumoptionsmodcompat-forge-1.0.0-1.20.1.jar",
+   "size": 181056,
+   "sha1": "214e96498ac1c840e3eee553fc69ba721e4f9a64"
+  },
+  {
+   "p": "mods/starlight-1.1.2+forge.1cda73c.jar",
+   "size": 110583,
+   "sha1": "a915880c7834a0b0f9f300f0e3053deaa9a3205a"
+  },
+  {
+   "p": "mods/worldedit-mod-7.2.15.jar",
+   "size": 5825402,
+   "sha1": "9c52765ca56f917ef8cbafc20e9a4f45c346508f"
+  },
+  {
+   "p": "mods/xaeroworldmap-forge-1.20.1-1.47.0.jar",
+   "size": 1429424,
+   "sha1": "6715c1d3758a3805589d82c41dc581537fe185cd"
+  },
+  {
+   "p": "config/betterfpsdist.json",
+   "size": 722,
+   "sha1": "88ac7fa3016fcbfe86f4cb6189fe500d74959c69"
+  },
+  {
+   "p": "config/connectivity.json",
+   "size": 1818,
+   "sha1": "3320ae1aa9f9295d26ce8705195948e99d277111"
+  },
+  {
+   "p": "config/cpm.json",
+   "size": 332,
+   "sha1": "43b09b2dc2c13651e6cfca4b177bb9ad5f869365"
+  },
+  {
+   "p": "config/cull-less-leaves.json",
+   "size": 35,
+   "sha1": "62ff3023e189145815899d2d0b35b362fe5a9f5d"
+  },
+  {
+   "p": "config/cupboard.json",
+   "size": 1364,
+   "sha1": "eb126f493318b72b9af3676234bae75a0e782671"
+  },
+  {
+   "p": "config/embeddium-fingerprint.json",
+   "size": 427,
+   "sha1": "6d1a3637c873cecd7f74aa2bba0627d73cd37328"
+  },
+  {
+   "p": "config/embeddium-mixins.properties",
+   "size": 269,
+   "sha1": "a729ee50d18cf2204ff9fc33bc21641d55185c88"
+  },
+  {
+   "p": "config/embeddium-options.json",
+   "size": 852,
+   "sha1": "c46718c2b687959e2f8f7c46ba64eb2b7413a80d"
+  },
+  {
+   "p": "config/explosiveenhancement.toml",
+   "size": 2150,
+   "sha1": "0342edea5287adb4a7fff8e9a002e7f98007d27d"
+  },
+  {
+   "p": "config/ferritecore-mixin.toml",
+   "size": 1516,
+   "sha1": "bada32b53873ce4121ffefb82ca804c94aef2e0b"
+  },
+  {
+   "p": "config/fml.toml",
+   "size": 1147,
+   "sha1": "5850d014d8cc0cb6e529a9630398080506f90262"
+  },
+  {
+   "p": "config/forge-client.toml",
+   "size": 1628,
+   "sha1": "55e80f51f0c9cf66de1f95c4d775b24dc59627a1"
+  },
+  {
+   "p": "config/forgemodmenu.json",
+   "size": 105,
+   "sha1": "4920b9abd3028b842cf9f43bce18bdd23f1e56f6"
+  },
+  {
+   "p": "config/fpsreducer/fpsreducer-client.toml",
+   "size": 3351,
+   "sha1": "4c8ede9991dac82730d7d4bf4c007deb36012b20"
+  },
+  {
+   "p": "config/immediatelyfast.json",
+   "size": 1060,
+   "sha1": "adcb21b0ad5f7f1c124517ff64fc701a737e4ea1"
+  },
+  {
+   "p": "config/itemborders-common.toml",
+   "size": 4243,
+   "sha1": "c6e8c86c0d26084f947314788df0399a70d6e2e4"
+  },
+  {
+   "p": "config/jei/blacklist.json",
+   "size": 19,
+   "sha1": "7a9c83de081216d9061bffda2d30114104ef6ee3"
+  },
+  {
+   "p": "config/jei/client/default/jei-client.ini",
+   "size": 14511,
+   "sha1": "3d1ca22f68afcfcd4311e2f4a07bb5129ac99ac6"
+  },
+  {
+   "p": "config/jei/client/default/jei-colors.ini",
+   "size": 1655,
+   "sha1": "1044f6310eb4e62253c9d9e1ba3a9313599b310e"
+  },
+  {
+   "p": "config/jei/client/default/jei-debug.ini",
+   "size": 1174,
+   "sha1": "d02dc7d7cf1c8ced3ef1f9253a0bbadb6580d56d"
+  },
+  {
+   "p": "config/jei/client/default/jei-mod-id-format.ini",
+   "size": 863,
+   "sha1": "6106cc9c99906ea9da4854730887379ec1e8b256"
+  },
+  {
+   "p": "config/jei/client/ingredient-list-mod-sort-order.ini",
+   "size": 66,
+   "sha1": "bbd919fe08b60db9c430a86c7367f82ca33c0699"
+  },
+  {
+   "p": "config/jei/client/ingredient-list-type-sort-order.ini",
+   "size": 99,
+   "sha1": "77ee8bfa5522fe6d88094bb9034e45611c785eeb"
+  },
+  {
+   "p": "config/jei/client/jei-client.ini",
+   "size": 14511,
+   "sha1": "3d1ca22f68afcfcd4311e2f4a07bb5129ac99ac6"
+  },
+  {
+   "p": "config/jei/client/recipe-category-sort-order.ini",
+   "size": 395,
+   "sha1": "ab7be45afeb551ea75ee15432c20f59533ddf02c"
+  },
+  {
+   "p": "config/jei/world/local/New World (2)/lookupHistory.ini",
+   "size": 385,
+   "sha1": "fdfeb655214d1567147a9724e5ef6423c987054b"
+  },
+  {
+   "p": "config/jei/world/server/Minecraft Server (chiletsafio_holy_gg)/lookupHistory.ini",
+   "size": 2524,
+   "sha1": "50773f058f217a6587797cf5c9c14e7d85202cd3"
+  },
+  {
+   "p": "config/jei/world/server/Minecraft Server (srpett_aternos_me)/lookupHistory.ini",
+   "size": 689,
+   "sha1": "f130c8215225ba10863974ac5e288d72b57c8d30"
+  },
+  {
+   "p": "config/limitedchunks.json",
+   "size": 504,
+   "sha1": "7fd1ce3dc8e636e8ccfb3ee23d019986af6c62ba"
+  },
+  {
+   "p": "config/mezz_config/client/default/settings.ini",
+   "size": 1452,
+   "sha1": "37c6c10d605efbf78119e1fea0d6d0b06ba9ca77"
+  },
+  {
+   "p": "config/modmenu.json",
+   "size": 814,
+   "sha1": "7e4d498194b4cfea3ac311623fe09a3fa2927860"
+  },
+  {
+   "p": "config/more_owleaf/admins.json",
+   "size": 27,
+   "sha1": "e4f70b783e53e213ba16ab83df702d0973f7d8e2"
+  },
+  {
+   "p": "config/more_owleaf-common.toml",
+   "size": 1001,
+   "sha1": "9597307e9be88485c1f7bd3ff5ff8ef7cde14701"
+  },
+  {
+   "p": "config/pehkui-client.toml",
+   "size": 138,
+   "sha1": "50ccb3af7b7fc2103f3f34de24a7c0564fc8a997"
+  },
+  {
+   "p": "config/pehkui-common.toml",
+   "size": 407,
+   "sha1": "c11b9ccc2be7db28ea07b48af4ff9b1822082c7b"
+  },
+  {
+   "p": "config/smoothchunk.json",
+   "size": 610,
+   "sha1": "c9a641c3cbeaff2db78da59a2b0bf5af6c45ce6d"
+  },
+  {
+   "p": "config/sodium-extra-options.json",
+   "size": 1461,
+   "sha1": "8fc75d725728bed776bd034199cd49f8a42c69bf"
+  },
+  {
+   "p": "config/sodium-extra.properties",
+   "size": 360,
+   "sha1": "e90b2514226a0624cf42112b42477f9872598b89"
+  },
+  {
+   "p": "config/sodiumdynamiclights-client.toml",
+   "size": 659,
+   "sha1": "6cc0f822d81b95d1c458dfef92ba5a1daae9053b"
+  },
+  {
+   "p": "config/sodiumextras-client.toml",
+   "size": 4966,
+   "sha1": "779b7f66a99f424b89a2a0d96b5b408dd7c25c57"
+  },
+  {
+   "p": "config/worldedit/worldedit.properties",
+   "size": 2541,
+   "sha1": "439bff63c9964647f83522f1f574d8ef205a6c0d"
+  },
+  {
+   "p": "config/xaero/lib/client.cfg",
+   "size": 26,
+   "sha1": "45cccfb3eb8a7a784bd4c29539e5558445f90bcf"
+  },
+  {
+   "p": "config/xaero/lib/common.cfg",
+   "size": 236,
+   "sha1": "8ae8d6ea0330bec2c0db28b109a12443708f1e7b"
+  },
+  {
+   "p": "config/xaero/lib/profiles/default.cfg",
+   "size": 121,
+   "sha1": "253bac0f5181c8db8e488832c46a8d40018650cf"
+  },
+  {
+   "p": "config/xaero/lib/server_profiles/default.cfg",
+   "size": 75,
+   "sha1": "8efdb5a6c4f4f41a36b531d54592321012491fb2"
+  },
+  {
+   "p": "config/xaero/world-map/client.cfg",
+   "size": 521,
+   "sha1": "27b70648a1bccd0561ae94c0a1a978f283893dea"
+  },
+  {
+   "p": "config/xaero/world-map/common.cfg",
+   "size": 141,
+   "sha1": "c3c64f24c8d33940264147473e4a1c8ba5c219ff"
+  },
+  {
+   "p": "config/xaero/world-map/profiles/default.cfg",
+   "size": 1619,
+   "sha1": "2f1680b1a14bf8cc756c5911c9b9f90e119a365e"
+  },
+  {
+   "p": "config/xaero/world-map/server_profiles/default.cfg",
+   "size": 75,
+   "sha1": "8efdb5a6c4f4f41a36b531d54592321012491fb2"
+  },
+  {
+   "p": "config/xaeropatreon.txt",
+   "size": 0,
+   "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  },
+  {
+   "p": "icon.png",
+   "size": 442918,
+   "sha1": "0a410e7aceaa12209463ba0bdf655288892007d1"
+  },
+  {
+   "p": "banner.gif",
+   "size": 22859777,
+   "sha1": "c81814e5ca7691fd7c90113b71281128b788b42c"
+  }
+ ],
+ "external": [],
+ "social": "",
+ "app": {
+  "v": 1792865141,
+  "shell": 1,
+  "files": [
+   {
+    "p": "main.js",
+    "size": 43587,
+    "sha256": "630c7cdeaf020d3caff372ba2cbde46f94e7d183d6cf777e84b4811e8180ddef"
+   },
+   {
+    "p": "preload.js",
+    "size": 2866,
+    "sha256": "c1dcb5fadb32e24b9033bc9ff255a4aca6cd11068715f671466b474a81cadc6d"
+   },
+   {
+    "p": "renderer/assets/LEEME.txt",
+    "size": 292,
+    "sha256": "1b7b14386425289b3dbd20e22e6af3f1fa25a65d59016c53ee8f095520799410"
+   },
+   {
+    "p": "renderer/assets/icon.ico",
+    "size": 32060,
+    "sha256": "ff358a5dbfaa3264869103ca5bdbc9154ebeb2cf185ca0e3a4f01bbf9ba273c3"
+   },
+   {
+    "p": "renderer/assets/icon.png",
+    "size": 14469,
+    "sha256": "2b9d1e990b4bf21049c032657ac7ba2c3198f57f389ba95ed16c44238c6190c0"
+   },
+   {
+    "p": "renderer/assets/logo.png",
+    "size": 51890,
+    "sha256": "a681b8708357309b455877cd9a3dad96c2acdc584072a06d7b220fa7e6252fab"
+   },
+   {
+    "p": "renderer/index.html",
+    "size": 20284,
+    "sha256": "df2ae874fdac327ff6dbdeeaf14bdbdc85b1b5c7120c8eb575f8852c6304bcff"
+   },
+   {
+    "p": "renderer/renderer.js",
+    "size": 44944,
+    "sha256": "7b46fb9388ede8cab3c5575184ffb642e55265c5e9877a9aef9814397e3e4903"
+   },
+   {
+    "p": "renderer/styles.css",
+    "size": 41526,
+    "sha256": "3cd93a19c6568763c8c362f8bc56c991b0d84f846ddc8a47e7484419413f7bda"
+   },
+   {
+    "p": "src/appupdate.js",
+    "size": 5820,
+    "sha256": "4ff64ea86678ce64b933ffd6846303df3a6293360405a3a004dfa6f19298adf4"
+   },
+   {
+    "p": "src/auth.js",
+    "size": 4858,
+    "sha256": "5079ad06547223dc58420315fdd48e0caa9fc9df7dd0150e840cb6e36d00a077"
+   },
+   {
+    "p": "src/download.js",
+    "size": 857,
+    "sha256": "cfea2395e53d6caeb5bbdccee3fb503864dd0dfaad89155ac5753ced1a4a40ad"
+   },
+   {
+    "p": "src/fabric.js",
+    "size": 2989,
+    "sha256": "9d2c144fee650eb81afc64bcaffae43e2a5671af11eb76a818249196d38b1aa1"
+   },
+   {
+    "p": "src/forge.js",
+    "size": 2096,
+    "sha256": "cf3c3fc0bd16ae72c549308400be772590d4d0306e533e7b1f0a4255aec978d1"
+   },
+   {
+    "p": "src/guard.js",
+    "size": 8899,
+    "sha256": "db4f97982e7bc648419ccbfc216a98a6087dcd76220f628642ef0c4264a5d414"
+   },
+   {
+    "p": "src/jarinfo.js",
+    "size": 3179,
+    "sha256": "9f2fbca40d5419a7542cd57f518cab69fdca6aabe7793e96b0bcb434dfde0eb7"
+   },
+   {
+    "p": "src/java.js",
+    "size": 5298,
+    "sha256": "a9644ef44618cdd1c1b285b7070d4a5773a84c49c5367e2ae2b4044ebc19696c"
+   },
+   {
+    "p": "src/launcher.js",
+    "size": 7052,
+    "sha256": "98f2c375b4f3c38575d89dc4cca3645fc05b7eb23f83c52729e7cef42420dbdd"
+   },
+   {
+    "p": "src/mods.js",
+    "size": 3925,
+    "sha256": "e5078e7bc6a2cfac192e86cc74bc94b7132a75e6e0b16df20c038498f9daa113"
+   },
+   {
+    "p": "src/pack.js",
+    "size": 6693,
+    "sha256": "eca3409c72e963c84a894a35dc80793037771a389e909d767ab80e46ae62318f"
+   },
+   {
+    "p": "src/paths.js",
+    "size": 679,
+    "sha256": "a1db8a7ff0810cb89a990303989283ce9fa4e6c4ff147b4faa3cd5e380fcb9c7"
+   },
+   {
+    "p": "src/playlog.js",
+    "size": 1326,
+    "sha256": "ca9a36f7693e481f8a769b06d4e9b2da12f6599069ca4b57bfaab53a5289416f"
+   },
+   {
+    "p": "src/remote.js",
+    "size": 17215,
+    "sha256": "f3c9b825ec32af6efd434e3c976d451fffe9924a5d41d936c5af24b9eefa28c3"
+   },
+   {
+    "p": "src/settings.js",
+    "size": 3664,
+    "sha256": "f63263bd9efd601003a58f551bf478672b545d2beef569f2aa3287c4a7b88d0c"
+   },
+   {
+    "p": "src/skin.js",
+    "size": 2175,
+    "sha256": "bb5e2bd082ae81e36ef556dfbbc796956974d8969b674269b991ce6368b9e78b"
+   },
+   {
+    "p": "src/social.js",
+    "size": 2714,
+    "sha256": "b1acf7bd835b37222cf92316b423d83e3c49697fc99daaf03257686f720dd34a"
+   },
+   {
+    "p": "src/updcore.js",
+    "size": 4939,
+    "sha256": "fe82c18bb5fffdcc9dc50e6cc3fd9445e4dda74f6d0fc78259fe141a56b99a6f"
+   }
+  ],
+  "sig": "kx0RaE0ijSt20YeYXQw3WbEwt4sPEKO2e9bgp5r2wtuWlVjfogba6ebhTyld5UlOz8OPSC2km9QvgyIB2zjNAg=="
+ }
+}
