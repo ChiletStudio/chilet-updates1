@@ -1,0 +1,4 @@
+LOGO DE CHILET STUDIO
+- Pon aqui tu logo como  logo.png  (se muestra grande en el centro de la pantalla principal; ideal PNG con fondo transparente).
+- Opcional: icon.png (cuadrado, 256x256 o mas) para el icono de la ventana.
+Si logo.png no existe, la app muestra "CHILET STUDIO" como texto.
