@@ -1,0 +1,29 @@
+
+#Configuración de la Fogata
+[fogata]
+	#Habilita o deshabilita las mecánicas de muerte y resurrección de la Fogata.
+	mecanicasFogataActivas = true
+	#Número de almas
+	#Range: 0 ~ 10
+	almasRequeridas = 1
+	#Número de vidas
+	#Range: 1 ~ 10
+	vidasIniciales = 1
+	#Uso de alma (formato: modid:item)
+	itemCuchara = "minecraft:stick"
+	#No uso de alma (formato: modid:item)
+	itemTenedor = "minecraft:diamond"
+	#Define el método de expulsión. NA: Solo cambia a espectador sin expulsar.
+	#Allowed Values: WHITELIST, BAN, BANIP, NA
+	metodoExpulsion = "WHITELIST"
+	#Cantidad de segundos antes de ser expulsado.
+	#Range: 1 ~ 10
+	cooldownExpulsion = 5
+	#Modo de juego al que se cambia el jugador antes de ser expulsado.
+	#Allowed Values: SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR
+	gamemodeBeforeExpulsion = "SPECTATOR"
+	#Coordenadas X Y Z de reaparición.
+	coorsPosRevive = "0 80 0"
+	#Mensaje que se muestra al ser expulsado o baneado por muerte.
+	mensajeExpulsion = "Has Muerto."
+
