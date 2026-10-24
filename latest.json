@@ -1,5 +1,5 @@
 {
- "version": 1792865142,
+ "version": 1792877617,
  "profile": {
   "id": "pmuuc8azv",
   "name": "ChiletSafio",
@@ -11,34 +11,19 @@
  },
  "files": [
   {
-   "p": "mods/betterfpsdist-1.20.1-6.0.jar",
-   "size": 19917,
-   "sha1": "8e4fe2cd85c08c24ab363b47a63d1c872fc3cc1e"
-  },
-  {
-   "p": "mods/cielorojo-67-forge-1.20.1.jar",
-   "size": 31145,
-   "sha1": "f45f3a30da48b9ed8c2dd88395a94cfcf91399ad"
-  },
-  {
-   "p": "mods/connectivity-1.20.1-7.7.jar",
-   "size": 122337,
-   "sha1": "e9426c921b5c3c43ed90bf1d8faea8a307c0bc8d"
-  },
-  {
-   "p": "mods/CullLessLeaves-Reforged-1.20.1-1.0.5.jar",
-   "size": 22474,
-   "sha1": "71b1603071461e036a3ba2aaeeb52cc10fa3d348"
-  },
-  {
-   "p": "mods/cupboard-1.20.1-4.2.jar",
-   "size": 33422,
-   "sha1": "db25dfc4935b7f1bde62c69f13a7b70e2ecd9f2f"
+   "p": "mods/architectury-9.2.14-forge.jar",
+   "size": 580602,
+   "sha1": "a52918a500ff421180a1cbd1a0cabee712134ec4"
   },
   {
    "p": "mods/CustomPlayerModels-1.20-0.6.27a.jar",
    "size": 2805930,
    "sha1": "4652dee093c796799756f5f6c89314c6d601ae65"
+  },
+  {
+   "p": "mods/customskyboxes-forge-mc1.20.1-1.0.4.1.jar",
+   "size": 489715,
+   "sha1": "59d59c135d21ebb355d815b7d7358b2e50aa76c6"
   },
   {
    "p": "mods/d3d-1.0.3-forge-1.20.1.jar",
@@ -51,14 +36,9 @@
    "sha1": "22a4b7020f7c34d13d4649239f5831df6c6b033b"
   },
   {
-   "p": "mods/drippyloadingscreen_forge_3.1.5_MC_1.20.1.jar",
-   "size": 281881,
-   "sha1": "a33d48809db8a2f1eb3667fe140d7a4104d80dca"
-  },
-  {
-   "p": "mods/embeddium-0.3.31+mc1.20.1.jar",
-   "size": 1320675,
-   "sha1": "bb2fa8f3e493af16af9160d049f96c614a1faf2f"
+   "p": "mods/emotecraft-for-MC1.20.1-2.2.7-b.build.50-forge.jar",
+   "size": 680255,
+   "sha1": "fcff067375cfe917cbf235218f49ceb58e598a5c"
   },
   {
    "p": "mods/explosiveenhancement-1.2.0.jar",
@@ -66,39 +46,9 @@
    "sha1": "35cf80849ac4b19416cadc12cf10de34295e51f5"
   },
   {
-   "p": "mods/fancymenu_forge_3.9.14_MC_1.20.1.jar",
-   "size": 26191988,
-   "sha1": "8916c8f2f12a986365148661fb59650950913b32"
-  },
-  {
-   "p": "mods/fastasyncworldsave-1.20.1-2.6.jar",
-   "size": 14812,
-   "sha1": "3a3180f5fc9d1209ca0ad69084afe8ee42ba44d6"
-  },
-  {
-   "p": "mods/ferritecore-6.0.1-forge.jar",
-   "size": 123034,
-   "sha1": "417fb6ce8f52abf40bd9d0390371790f9576f8ba"
-  },
-  {
-   "p": "mods/FpsReducer2-forge-1.20.1-2.5.1.jar",
-   "size": 125660,
-   "sha1": "4920a2e1d17090007179a568181624847fba0993"
-  },
-  {
    "p": "mods/geckolib-forge-1.20.1-4.8.4.jar",
    "size": 1038209,
    "sha1": "50e1407869ef0e909e3bdda9328b8bd7db03fdc0"
-  },
-  {
-   "p": "mods/Iceberg-1.20.1-forge-1.1.25.jar",
-   "size": 134551,
-   "sha1": "d551ff55814cfb01403b812459ee5a02b020d87b"
-  },
-  {
-   "p": "mods/ImmediatelyFast-Forge-1.5.5+1.20.4.jar",
-   "size": 532063,
-   "sha1": "9eacd407b7dea636d375dc47335d92f616484ea2"
   },
   {
    "p": "mods/immersive_paintings-0.6.13+1.20.1-forge.jar",
@@ -106,44 +56,29 @@
    "sha1": "3f2a668f2235a6a908fde545d140013456b5412f"
   },
   {
-   "p": "mods/ItemBorders-1.20.1-forge-1.2.2.jar",
-   "size": 20832,
-   "sha1": "cf42466689489348e1e3a5df00d2ce6c65dd978a"
+   "p": "mods/incontrol-1.20-9.5.0.jar",
+   "size": 371650,
+   "sha1": "d9de091a691c65bb24523036de66b13939427fde"
   },
   {
-   "p": "mods/jei-1.20.1-forge-15.62.0.219.jar",
-   "size": 2232177,
-   "sha1": "e514cd6bc50b816487d9c25cd457de5e0bd5b07f"
+   "p": "mods/infinity_cave-0.4-1.20.1-FORGE.jar",
+   "size": 2075496,
+   "sha1": "044ee40bae035c04849ab95e21e9318fe4338b3a"
   },
   {
-   "p": "mods/konkrete_forge_1.8.0_MC_1.20-1.20.1.jar",
-   "size": 625185,
-   "sha1": "2019d821bed9071daabed43979433a5473ceee49"
+   "p": "mods/jei-1.20.1-forge-15.56.0.205.jar",
+   "size": 1778129,
+   "sha1": "7f64b7f8fde7f001ef054dabe3618a8780ba2650"
   },
   {
-   "p": "mods/limitedchunks-1.20.1-4.1.jar",
-   "size": 16405,
-   "sha1": "c6dae9dcdb46b577aba270d3f951291ea235e334"
-  },
-  {
-   "p": "mods/melody_forge_1.0.3_MC_1.20.1-1.20.4.jar",
-   "size": 37178,
-   "sha1": "e0942d396a70c09038e6c2e5e1da6505178249b8"
-  },
-  {
-   "p": "mods/MenuDED3-0.0.0 (1).jar",
+   "p": "mods/MenuDED3-0.0.0.jar",
    "size": 869959,
    "sha1": "c1a8f8a28293c29e1f4ea5480101cf05cb93d020"
   },
   {
-   "p": "mods/modmenu-1.0.0-1.20.1.jar",
-   "size": 575552,
-   "sha1": "65cfa00500721482277c745f6eefd28a0190279f"
-  },
-  {
-   "p": "mods/modminds-1.0.7-forge-1.20.1.jar",
-   "size": 6521161,
-   "sha1": "91d3e44ca956b230d44e1ef76f787dba4e9b4351"
+   "p": "mods/mezz_config-1.20.1-forge-0.6.8.jar",
+   "size": 364842,
+   "sha1": "e0e9f46bbd24b44a7046c45ccf6aff0bc0a7b735"
   },
   {
    "p": "mods/more_owleaf-1.3.7.jar",
@@ -151,14 +86,19 @@
    "sha1": "4d88a1dfca02eebe0dfdd35e40c33a5f7b16b19a"
   },
   {
-   "p": "mods/morpher-1.0.8.jar",
-   "size": 183388,
-   "sha1": "d50d44fda276efab88634ca8d4da4b5851be1ed3"
+   "p": "mods/morpher-1.0.9.jar",
+   "size": 204213,
+   "sha1": "5fcf7df02b827ac29872e09dd90b70c281edeb8d"
   },
   {
-   "p": "mods/noisiumed-forge-3.0.6+mc1.20-1.20.1.jar",
-   "size": 218152,
-   "sha1": "34130d62dac472eae1357a1f0d64867a19fd3402"
+   "p": "mods/OctoLib-FORGE-0.5.0.1+1.20.1.jar",
+   "size": 424035,
+   "sha1": "9eab28baff36942e1c924489e34753df10f40208"
+  },
+  {
+   "p": "mods/Owleaf Tikis Forge 1.20.1.jar",
+   "size": 651266,
+   "sha1": "92c54c424fcc5f93eff48b48de5e7f59ef7c211d"
   },
   {
    "p": "mods/Pehkui-3.8.2+1.20.1-forge.jar",
@@ -171,54 +111,9 @@
    "sha1": "a2bfe43a4c5b5077626d7f0af89fbe9972ba723f"
   },
   {
-   "p": "mods/Playback-1.0.3-SNAPSHOT-all (1).jar",
-   "size": 634438,
-   "sha1": "63253a58f003a9f978bdacc16c15c7c59625ab4c"
-  },
-  {
-   "p": "mods/Prism-1.20.1-forge-1.0.5.jar",
-   "size": 52205,
-   "sha1": "bcb4bbb1052f49ed4fe6e7d5d7f91f68d45c3fe3"
-  },
-  {
-   "p": "mods/redirector-5.0.0.jar",
-   "size": 5793,
-   "sha1": "0b246b2648a2e463f243852fdd1ef8c2931da19c"
-  },
-  {
-   "p": "mods/rubidium-extra-0.5.4.4+mc1.20.1-build.131.jar",
-   "size": 568608,
-   "sha1": "bb422d5626bf69841e444a3e545c8e71b6928cf8"
-  },
-  {
-   "p": "mods/smoothchunk-1.20.1-4.1.jar",
-   "size": 14249,
-   "sha1": "3e142e4a2e12db1c9a3777879cc021aff49da088"
-  },
-  {
-   "p": "mods/sodiumdynamiclights-forge-1.0.10-1.20.1.jar",
-   "size": 511601,
-   "sha1": "d27524e85bed0f0af83c03be46f9ca3eb02a1be9"
-  },
-  {
-   "p": "mods/sodiumextras-forge-1.0.7-1.20.1.jar",
-   "size": 438540,
-   "sha1": "7603f44bc4750774fbbdc07a3153c391650fcf3d"
-  },
-  {
-   "p": "mods/sodiumoptionsapi-forge-1.0.10-1.20.1.jar",
-   "size": 443978,
-   "sha1": "7529fbf938787ed13a251cbf40936f8c29ec4b6c"
-  },
-  {
-   "p": "mods/sodiumoptionsmodcompat-forge-1.0.0-1.20.1.jar",
-   "size": 181056,
-   "sha1": "214e96498ac1c840e3eee553fc69ba721e4f9a64"
-  },
-  {
-   "p": "mods/starlight-1.1.2+forge.1cda73c.jar",
-   "size": 110583,
-   "sha1": "a915880c7834a0b0f9f300f0e3053deaa9a3205a"
+   "p": "mods/player-animation-lib-forge-1.0.2-rc1+1.20.jar",
+   "size": 181437,
+   "sha1": "16808f94a41d45d8e986b4e4ea6b02ba57fa058a"
   },
   {
    "p": "mods/worldedit-mod-7.2.15.jar",
@@ -229,6 +124,11 @@
    "p": "mods/xaeroworldmap-forge-1.20.1-1.47.0.jar",
    "size": 1429424,
    "sha1": "6715c1d3758a3805589d82c41dc581537fe185cd"
+  },
+  {
+   "p": "mods/yet_another_config_lib_v3-3.6.6+1.20.1-forge.jar",
+   "size": 1105891,
+   "sha1": "644731e321c53a35a0b3177a3cc6347fe38002f4"
   },
   {
    "p": "config/betterfpsdist.json",
