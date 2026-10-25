@@ -1,5 +1,5 @@
 {
- "version": 1792877617,
+ "version": 1792896747,
  "profile": {
   "id": "pmuuc8azv",
   "name": "ChiletSafio",
@@ -79,6 +79,11 @@
    "p": "mods/mezz_config-1.20.1-forge-0.6.8.jar",
    "size": 364842,
    "sha1": "e0e9f46bbd24b44a7046c45ccf6aff0bc0a7b735"
+  },
+  {
+   "p": "mods/modminds-1.0.7-forge-1.20.1.jar",
+   "size": 6521161,
+   "sha1": "91d3e44ca956b230d44e1ef76f787dba4e9b4351"
   },
   {
    "p": "mods/more_owleaf-1.3.7.jar",
@@ -171,6 +176,16 @@
    "sha1": "c46718c2b687959e2f8f7c46ba64eb2b7413a80d"
   },
   {
+   "p": "config/emotecraft.json",
+   "size": 647,
+   "sha1": "212357de0d0bc3432e2ca5a1ac866e88e89b2e69"
+  },
+  {
+   "p": "config/emotecraft_emote_map.json",
+   "size": 117,
+   "sha1": "be63473ca7f8286a8827f2e151fff6ce4016ff4d"
+  },
+  {
    "p": "config/explosiveenhancement.toml",
    "size": 2150,
    "sha1": "0342edea5287adb4a7fff8e9a002e7f98007d27d"
@@ -204,6 +219,66 @@
    "p": "config/immediatelyfast.json",
    "size": 1060,
    "sha1": "adcb21b0ad5f7f1c124517ff64fc701a737e4ea1"
+  },
+  {
+   "p": "config/incontrol/breakevents.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/effects.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/events.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/experience.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/leftclicks.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/loot.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/phases.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/placeevents.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/rightclicks.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/spawn.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/spawner.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
+  },
+  {
+   "p": "config/incontrol/summonaid.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
   },
   {
    "p": "config/itemborders-common.toml",
@@ -254,6 +329,46 @@
    "p": "config/jei/client/recipe-category-sort-order.ini",
    "size": 395,
    "sha1": "ab7be45afeb551ea75ee15432c20f59533ddf02c"
+  },
+  {
+   "p": "config/jei/ingredient-list-mod-sort-order.ini",
+   "size": 48,
+   "sha1": "6e57a4fa0c38e4d9431b95068dd87aa7803575b4"
+  },
+  {
+   "p": "config/jei/ingredient-list-type-sort-order.ini",
+   "size": 74,
+   "sha1": "dc48be3ecfb2cd9c06a53712b3044f8123a6c06e"
+  },
+  {
+   "p": "config/jei/jei-client.ini",
+   "size": 12984,
+   "sha1": "eb958e2e22e54a58700abe3fc4f860fcd247b844"
+  },
+  {
+   "p": "config/jei/jei-colors.ini",
+   "size": 1362,
+   "sha1": "46f80e4857aa8f8d9b0928e107c4391d54b3b313"
+  },
+  {
+   "p": "config/jei/jei-debug.ini",
+   "size": 939,
+   "sha1": "e76a74cd66991a5a40b0a3cd7f1dfad000ff726c"
+  },
+  {
+   "p": "config/jei/jei-mod-id-format.ini",
+   "size": 489,
+   "sha1": "2cd7853bd68950b2d61a80dd549ed65be0e0f6cb"
+  },
+  {
+   "p": "config/jei/recipe-category-sort-order.ini",
+   "size": 342,
+   "sha1": "a2cd32204e6cb75eb10a37d7bc47efd45b72d077"
+  },
+  {
+   "p": "config/jei/world/local/New World/lookupHistory.ini",
+   "size": 2057,
+   "sha1": "07bd62b77ab69ffd6b2cbb2316875b9835395527"
   },
   {
    "p": "config/jei/world/local/New World (2)/lookupHistory.ini",
@@ -333,7 +448,7 @@
   {
    "p": "config/worldedit/worldedit.properties",
    "size": 2541,
-   "sha1": "439bff63c9964647f83522f1f574d8ef205a6c0d"
+   "sha1": "cab5bb8be11de2554b0678541fea6f9aa963d1d1"
   },
   {
    "p": "config/xaero/lib/client.cfg",
@@ -379,6 +494,11 @@
    "p": "config/xaeropatreon.txt",
    "size": 0,
    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  },
+  {
+   "p": "config/yacl.json5",
+   "size": 35,
+   "sha1": "ef6eac77bc8ec50971872b820002db7227ece802"
   },
   {
    "p": "icon.png",
