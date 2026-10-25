@@ -1,5 +1,5 @@
 {
- "version": 1792954868,
+ "version": 1792956215,
  "profile": {
   "id": "pmuuc8azv",
   "name": "ChiletSafio",
@@ -29,6 +29,11 @@
    "p": "mods/d3d-1.0.3-forge-1.20.1.jar",
    "size": 37312626,
    "sha1": "b74de8b22f7a84f75dc04b968348dfc3b4162124"
+  },
+  {
+   "p": "mods/dedsafio3-0.0.9-forge-1.20.1 (1) (2).jar",
+   "size": 7366550,
+   "sha1": "22a4b7020f7c34d13d4649239f5831df6c6b033b"
   },
   {
    "p": "mods/emotecraft-for-MC1.20.1-2.2.7-b.build.50-forge.jar",
@@ -326,6 +331,21 @@
    "sha1": "3d1ca22f68afcfcd4311e2f4a07bb5129ac99ac6"
   },
   {
+   "p": "config/jei/client/jei-colors.ini",
+   "size": 1655,
+   "sha1": "1044f6310eb4e62253c9d9e1ba3a9313599b310e"
+  },
+  {
+   "p": "config/jei/client/jei-debug.ini",
+   "size": 1174,
+   "sha1": "d02dc7d7cf1c8ced3ef1f9253a0bbadb6580d56d"
+  },
+  {
+   "p": "config/jei/client/jei-mod-id-format.ini",
+   "size": 863,
+   "sha1": "6106cc9c99906ea9da4854730887379ec1e8b256"
+  },
+  {
    "p": "config/jei/client/recipe-category-sort-order.ini",
    "size": 395,
    "sha1": "ab7be45afeb551ea75ee15432c20f59533ddf02c"
@@ -351,12 +371,27 @@
    "sha1": "46f80e4857aa8f8d9b0928e107c4391d54b3b313"
   },
   {
+   "p": "config/jei/jei-colors.ini.bak.1",
+   "size": 1362,
+   "sha1": "46f80e4857aa8f8d9b0928e107c4391d54b3b313"
+  },
+  {
    "p": "config/jei/jei-debug.ini",
    "size": 939,
    "sha1": "e76a74cd66991a5a40b0a3cd7f1dfad000ff726c"
   },
   {
+   "p": "config/jei/jei-debug.ini.bak.1",
+   "size": 939,
+   "sha1": "e76a74cd66991a5a40b0a3cd7f1dfad000ff726c"
+  },
+  {
    "p": "config/jei/jei-mod-id-format.ini",
+   "size": 489,
+   "sha1": "2cd7853bd68950b2d61a80dd549ed65be0e0f6cb"
+  },
+  {
+   "p": "config/jei/jei-mod-id-format.ini.bak.1",
    "size": 489,
    "sha1": "2cd7853bd68950b2d61a80dd549ed65be0e0f6cb"
   },
