@@ -1,5 +1,5 @@
 {
- "version": 1792896747,
+ "version": 1792954868,
  "profile": {
   "id": "pmuuc8azv",
   "name": "ChiletSafio",
@@ -21,9 +21,9 @@
    "sha1": "4652dee093c796799756f5f6c89314c6d601ae65"
   },
   {
-   "p": "mods/customskyboxes-forge-mc1.20.1-1.0.4.1.jar",
-   "size": 489715,
-   "sha1": "59d59c135d21ebb355d815b7d7358b2e50aa76c6"
+   "p": "mods/customskyboxes-neoforge-mc1.20.1-1.0.4.jar",
+   "size": 482473,
+   "sha1": "96bbb3b1bfdd68396ddb78603d0e3f0c5c9f11fa"
   },
   {
    "p": "mods/d3d-1.0.3-forge-1.20.1.jar",
@@ -31,17 +31,12 @@
    "sha1": "b74de8b22f7a84f75dc04b968348dfc3b4162124"
   },
   {
-   "p": "mods/dedsafio3-0.0.9-forge-1.20.1 (1).jar",
-   "size": 7366550,
-   "sha1": "22a4b7020f7c34d13d4649239f5831df6c6b033b"
-  },
-  {
    "p": "mods/emotecraft-for-MC1.20.1-2.2.7-b.build.50-forge.jar",
    "size": 680255,
    "sha1": "fcff067375cfe917cbf235218f49ceb58e598a5c"
   },
   {
-   "p": "mods/explosiveenhancement-1.2.0.jar",
+   "p": "mods/explosiveenhancement-1.2.0 (1).jar",
    "size": 97476,
    "sha1": "35cf80849ac4b19416cadc12cf10de34295e51f5"
   },
@@ -66,12 +61,12 @@
    "sha1": "044ee40bae035c04849ab95e21e9318fe4338b3a"
   },
   {
-   "p": "mods/jei-1.20.1-forge-15.56.0.205.jar",
-   "size": 1778129,
-   "sha1": "7f64b7f8fde7f001ef054dabe3618a8780ba2650"
+   "p": "mods/jei-1.20.1-forge-15.62.0.219.jar",
+   "size": 2232177,
+   "sha1": "e514cd6bc50b816487d9c25cd457de5e0bd5b07f"
   },
   {
-   "p": "mods/MenuDED3-0.0.0.jar",
+   "p": "mods/MenuDED3-0.0.0 (1).jar",
    "size": 869959,
    "sha1": "c1a8f8a28293c29e1f4ea5480101cf05cb93d020"
   },
@@ -81,7 +76,7 @@
    "sha1": "e0e9f46bbd24b44a7046c45ccf6aff0bc0a7b735"
   },
   {
-   "p": "mods/modminds-1.0.7-forge-1.20.1.jar",
+   "p": "mods/modminds-1.0.7-forge-1.20.1 (1).jar",
    "size": 6521161,
    "sha1": "91d3e44ca956b230d44e1ef76f787dba4e9b4351"
   },
@@ -91,9 +86,9 @@
    "sha1": "4d88a1dfca02eebe0dfdd35e40c33a5f7b16b19a"
   },
   {
-   "p": "mods/morpher-1.0.9.jar",
-   "size": 204213,
-   "sha1": "5fcf7df02b827ac29872e09dd90b70c281edeb8d"
+   "p": "mods/morpher-1.0.8.jar",
+   "size": 183388,
+   "sha1": "d50d44fda276efab88634ca8d4da4b5851be1ed3"
   },
   {
    "p": "mods/OctoLib-FORGE-0.5.0.1+1.20.1.jar",
@@ -101,7 +96,7 @@
    "sha1": "9eab28baff36942e1c924489e34753df10f40208"
   },
   {
-   "p": "mods/Owleaf Tikis Forge 1.20.1.jar",
+   "p": "mods/Owleaf Tikis Forge 1.20.1 (1).jar",
    "size": 651266,
    "sha1": "92c54c424fcc5f93eff48b48de5e7f59ef7c211d"
   },
@@ -111,9 +106,9 @@
    "sha1": "4bc816efdd8e5e2a97423313674401351710e403"
   },
   {
-   "p": "mods/plasmovoice-forge-1.20.1-2.1.17.jar",
-   "size": 12337455,
-   "sha1": "a2bfe43a4c5b5077626d7f0af89fbe9972ba723f"
+   "p": "mods/plasmovoice-forge-1.20.1-2.1.8.jar",
+   "size": 12182458,
+   "sha1": "5264240aefe6086f829875b2b02638b2cacaff59"
   },
   {
    "p": "mods/player-animation-lib-forge-1.0.2-rc1+1.20.jar",
@@ -219,6 +214,11 @@
    "p": "config/immediatelyfast.json",
    "size": 1060,
    "sha1": "adcb21b0ad5f7f1c124517ff64fc701a737e4ea1"
+  },
+  {
+   "p": "config/incontrol/areas.json",
+   "size": 2,
+   "sha1": "97d170e1550eee4afc0af065b78cda302a97674c"
   },
   {
    "p": "config/incontrol/breakevents.json",
@@ -332,8 +332,8 @@
   },
   {
    "p": "config/jei/ingredient-list-mod-sort-order.ini",
-   "size": 48,
-   "sha1": "6e57a4fa0c38e4d9431b95068dd87aa7803575b4"
+   "size": 58,
+   "sha1": "05f76874450776225fc156328297de442174534f"
   },
   {
    "p": "config/jei/ingredient-list-type-sort-order.ini",
