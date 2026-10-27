@@ -89,7 +89,7 @@ function repairForge(profile, log = () => {}) {
   const root = paths.root();
   const rm = p => { try { if (fs.existsSync(p)) { fs.rmSync(p, { recursive: true, force: true }); log('[reparación] quitado ' + path.relative(root, p)); } } catch { /* ignorar */ } };
   for (const j of [...walkJars(path.join(root, 'libraries')), ...walkJars(path.join(root, 'versions'))]) if (!jarOk(j)) rm(j);
-  for (const d of [['cpw'], ['net', 'minecraftforge'], ['io', 'github', 'zekerzhayard']]) rm(path.join(root, 'libraries', ...d));
+  for (const d of [['cpw'], ['net', 'minecraftforge'], ['io', 'github', 'zekerzhayard'], ['net', 'fabricmc']]) rm(path.join(root, 'libraries', ...d));
   try { for (const f of fs.readdirSync(paths.cache())) if (/^forge-.*-installer\.jar$/.test(f)) rm(path.join(paths.cache(), f)); } catch { /* sin cache */ }
   if (profile) repair(profile, () => {});
 }
@@ -103,6 +103,11 @@ function diagnose(instance, code, extraText = '') {
     if (recent) text += '\n' + fs.readFileSync(path.join(d, recent.f), 'utf8').slice(0, 200000);
   } catch { /* sin informes */ }
   if (/ModMismatchDisconnected|Mismatched mod channel|Incompatible FML modded server|Missing mods?:|mods? (?:are|is) missing/i.test(text)) return 'El servidor y tu modpack no tienen los mismos mods (o la misma versión de Forge). Pídele al dueño del servidor la lista de mods.';
+  if (/Incompatible mod set|ModResolutionException|Mod resolution failed|net\.fabricmc\.loader[^\n]*FormattedException/i.test(text)) {
+    const need = text.match(/(?:Mod|Mods?) '?([\w .-]+?)'? \(([\w-]+)\)[^\n]{0,40}requires[^\n]{3,120}/i) || text.match(/requires (?:any version of |version [^\n]{1,40} of )?(fabric-api|fabricloader|minecraft|[\w-]+)[^\n]{0,80}/i);
+    return `Fabric no pudo cargar los mods: falta un mod necesario o hay uno de otra versión${need ? ' (' + need[0].trim().slice(0, 140) + ')' : ''}. Casi siempre es Fabric API o un mod hecho para otra versión de Minecraft. Revisa la Consola.`;
+  }
+  if (/(NoClassDefFoundError|ClassNotFoundException|Could not find or load main class|NoSuchFileException|ZipException|Invalid or corrupt jarfile)[^\n]*(net[./]fabricmc|knot)/i.test(text)) return 'A Fabric le faltan archivos o están dañados. Ve a Ajustes → "Reparar Minecraft" y pulsa Jugar otra vez.';
   if (extraText && /InvalidMixinException|Mixin apply failed/.test(extraText)) {
     const m = extraText.match(/Mixin apply failed ([\w-]+)\.mixins\.json/) || extraText.match(/Mixin \[([\w-]+)\.mixins\.json/);
     return `El mod "${m ? m[1] : 'desconocido'}" no pudo aplicarse a Minecraft (error de Mixin). Casi siempre es un mod de otra versión de Minecraft/Forge, o Forge mezclado con otra versión. Revisa la Consola.`;
