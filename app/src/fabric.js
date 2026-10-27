@@ -8,14 +8,35 @@ const META = 'https://meta.fabricmc.net/v2/versions/loader';
 const HEAD = { 'User-Agent': 'ChiletStudio/1.3 (launcher)' };
 const LIB = /^[\w.-]+:[\w.-]+:[\w.+-]+(:[\w.-]+)?$/;
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+// Reintenta (3 veces) ante fallos de red o errores 5xx; un 4xx se devuelve tal cual.
+async function retry(fn, tries = 3) {
+  let last;
+  for (let i = 1; i <= tries; i++) {
+    try { return await fn(); } catch (e) { last = e; if (e && e.fatal) break; if (i < tries) await sleep(800 * i); }
+  }
+  throw last;
+}
 async function jget(u) {
-  const r = await fetch(u, { headers: HEAD, signal: AbortSignal.timeout(20000) });
-  if (!r.ok) throw new Error(`Fabric: ${u.replace(META, '…')} respondió ${r.status}`);
-  return r.json();
+  return retry(async () => {
+    const r = await fetch(u, { headers: HEAD, signal: AbortSignal.timeout(20000) });
+    if (!r.ok) throw Object.assign(new Error(`Fabric: ${u.replace(META, '…')} respondió ${r.status}`), { fatal: r.status >= 400 && r.status < 500 });
+    return r.json();
+  });
 }
 // Última versión ESTABLE del cargador de Fabric para esa versión de Minecraft.
+// Si no hay internet, se usa la última versión de Fabric que ya está instalada para ese Minecraft.
+function installedLoader(mc) {
+  try {
+    const re = new RegExp(`^fabric-loader-(.+)-${mc.replace(/\./g, '\\.')}$`);
+    const ids = fs.readdirSync(path.join(paths.root(), 'versions')).map(d => (re.exec(d) || [])[1]).filter(Boolean);
+    return ids.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).pop() || '';
+  } catch { return ''; }
+}
 async function latestLoader(mc) {
-  const list = await jget(`${META}/${encodeURIComponent(mc)}`);
+  let list;
+  try { list = await jget(`${META}/${encodeURIComponent(mc)}`); }
+  catch (e) { const have = installedLoader(mc); if (have) return have; throw e; }
   const pick = list.find(x => x.loader && x.loader.stable) || list[0];
   if (!pick) throw new Error(`Fabric todavía no tiene soporte para Minecraft ${mc}.`);
   return pick.loader.version;
@@ -28,8 +49,8 @@ async function ensure(mc, fv, log = () => {}) {
   if (!/^[\w.+-]{1,30}$/.test(fv)) throw new Error('Versión de Fabric no válida.');
   const id = versionId(mc, fv), dir = path.join(paths.root(), 'versions', id), jf = path.join(dir, id + '.json');
   let prof;
-  if (fs.existsSync(jf)) prof = JSON.parse(fs.readFileSync(jf, 'utf8'));
-  else {
+  try { if (fs.existsSync(jf)) { prof = JSON.parse(fs.readFileSync(jf, 'utf8')); if (!prof || !Array.isArray(prof.libraries) || !prof.mainClass) prof = null; } } catch { prof = null; }   // archivo dañado: se baja otra vez
+  if (!prof) {
     log(`[fabric] descargando el perfil de Fabric ${fv} para Minecraft ${mc}…`);
     prof = await jget(`${META}/${encodeURIComponent(mc)}/${encodeURIComponent(fv)}/profile/json`);
     fs.mkdirSync(dir, { recursive: true });
@@ -39,13 +60,23 @@ async function ensure(mc, fv, log = () => {}) {
     if (!LIB.test(String(lib.name))) continue;
     const rel = libPath(lib.name), dest = path.join(paths.root(), 'libraries', ...rel.split('/'));
     if (fs.existsSync(dest) && fs.statSync(dest).size > 0) continue;
-    const base = String(lib.url || 'https://maven.fabricmc.net/').replace(/\/?$/, '/');
-    if (!base.startsWith('https://')) continue;
+    const own = String(lib.url || 'https://maven.fabricmc.net/').replace(/\/?$/, '/');
+    const bases = [own, 'https://maven.fabricmc.net/', 'https://repo1.maven.org/maven2/'].filter((b, i, a) => b.startsWith('https://') && a.indexOf(b) === i);
     log(`[fabric] descargando ${path.basename(rel)}…`);
-    const r = await fetch(base + rel, { headers: HEAD, signal: AbortSignal.timeout(120000) });
-    if (!r.ok) throw new Error(`Fabric: ${path.basename(rel)} respondió ${r.status}`);
-    const buf = Buffer.from(await r.arrayBuffer());
-    if (lib.sha1 && crypto.createHash('sha1').update(buf).digest('hex') !== lib.sha1) throw new Error(`Fabric: ${path.basename(rel)} llegó dañado, vuelve a intentarlo.`);
+    let buf = null, why = '';
+    for (const base of bases) {
+      try {
+        buf = await retry(async () => {
+          const r = await fetch(base + rel, { headers: HEAD, signal: AbortSignal.timeout(120000) });
+          if (!r.ok) throw Object.assign(new Error(`respondió ${r.status}`), { fatal: r.status >= 400 && r.status < 500 });
+          const b = Buffer.from(await r.arrayBuffer());
+          if (lib.sha1 && crypto.createHash('sha1').update(b).digest('hex') !== lib.sha1) throw new Error('llegó dañado');
+          return b;
+        });
+        break;
+      } catch (e) { why = e?.message || String(e); }
+    }
+    if (!buf) throw new Error(`Fabric: no se pudo bajar ${path.basename(rel)} (${why}). Revisa tu internet y vuelve a pulsar Jugar.`);
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     fs.writeFileSync(dest, buf);
   }
