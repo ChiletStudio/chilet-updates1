@@ -7,6 +7,7 @@ const DEFAULTS = () => ({
   alwaysOffline: false,         // entrar siempre como jugador no premium (sin abrir el login de Microsoft)
   fullscreen: false,            // abrir Minecraft en pantalla completa
   javaPath: '',
+  autoPublish: true,            // creador: al cerrar Minecraft, publica solo los cambios de mods/config para todos
   offlineName: 'Jugador',
   loginMode: 'electron',        // 'electron' (ventana de la app) | 'raw' (navegador del sistema)
   forgeMode: 'mclc',            // 'mclc' (ForgeWrapper de la librería) | 'installer' (instalador oficial de Forge)
@@ -41,6 +42,7 @@ function update(patch) {
   if (Number.isFinite(patch.ramMax)) s.ramMax = Math.min(32, Math.max(1, Math.round(patch.ramMax)));
   if (typeof patch.fullscreen === 'boolean') s.fullscreen = patch.fullscreen;
   if (typeof patch.alwaysOffline === 'boolean') s.alwaysOffline = patch.alwaysOffline;
+  if (typeof patch.autoPublish === 'boolean') s.autoPublish = patch.autoPublish;
   if (typeof patch.javaPath === 'string') s.javaPath = patch.javaPath.trim();
   if (typeof patch.offlineName === 'string' && /^[A-Za-z0-9_]{3,16}$/.test(patch.offlineName)) s.offlineName = patch.offlineName;
   if (patch.loginMode === 'electron' || patch.loginMode === 'raw') s.loginMode = patch.loginMode;
