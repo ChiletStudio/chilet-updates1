@@ -1,19 +1,39 @@
 {
- "version": 1793138956,
+ "version": 1793140088,
  "profile": {
-  "id": "pmvr6x02w",
+  "id": "pmvr8tyf4",
   "name": "Minecraft 1.21.1",
   "mc": "1.21.1",
-  "forge": "52.1.20",
+  "forge": "",
   "server": "",
-  "loader": "",
+  "loader": "fabric",
   "fabric": ""
  },
  "files": [
   {
-   "p": "config/fml.toml",
-   "size": 1145,
-   "sha1": "06c06ad464c67cb1b376d46dea964124f1b358ea"
+   "p": "mods/drippyloadingscreen_fabric_3.1.5_MC_1.21.1.jar",
+   "size": 276120,
+   "sha1": "e47200680bf129bcddf514a70df2949fe03a146f"
+  },
+  {
+   "p": "mods/fabric-api-0.116.17+1.21.1.jar",
+   "size": 2452735,
+   "sha1": "810b2b0195371a012906241d8b85a32a1d6de53c"
+  },
+  {
+   "p": "mods/fancymenu_fabric_3.9.14_MC_1.21.1.jar",
+   "size": 26277804,
+   "sha1": "1d0e6f2195e14e22323e7e237013e5cb8e909f54"
+  },
+  {
+   "p": "mods/konkrete_fabric_1.9.9_MC_1.21.jar",
+   "size": 786695,
+   "sha1": "c521e23a8be17a941f4f95a76feba9df5e3de5d0"
+  },
+  {
+   "p": "mods/melody_fabric_1.0.10_MC_1.21.jar",
+   "size": 188035,
+   "sha1": "5624eea73f251c70a9489192d326f9b4aab3b13c"
   }
  ],
  "external": [],
