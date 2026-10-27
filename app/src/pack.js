@@ -41,14 +41,20 @@ function readPack(dir) {
   if (forge && !FORGE.test(forge)) throw new Error('pack.json: versión de Forge inválida.');
   const server = String(p.server || '');
   if (server && !SERVER.test(server)) throw new Error('pack.json: servidor inválido.');
-  return { id: String(p.id), name, mc: String(p.mc), forge, server, version: Number(p.version) || 1 };
+  const loader = p.loader === 'fabric' ? 'fabric' : '', fabric = loader && /^[\w.+-]{1,30}$/.test(String(p.fabric || '')) ? String(p.fabric) : '';
+  return { id: String(p.id), name, mc: String(p.mc), forge, server, ...(loader ? { loader, fabric } : {}), version: Number(p.version) || 1 };
 }
 
 // Instala/actualiza el pack incluido. Devuelve true si cambió algo.
-function sync(dir, log = () => {}) {
+// seedOnly (versión de creador): la carpeta de fábrica solo SIEMBRA un modpack vacío; nunca pisa los mods/config que ya tienes (esos son los que se publican a todos).
+function sync(dir, log = () => {}, { seedOnly = false } = {}) {
   const pack = readPack(dir);
   if (!pack) return false;
   const inst = paths.instance(pack.id);
+  if (seedOnly) {
+    let has = false; try { has = fs.readdirSync(path.join(inst, 'mods')).length > 0; } catch { /* sin carpeta */ }
+    if (has) return false;
+  }
   const stateFile = path.join(inst, '.chilet-pack.json');
   let st = {};
   try { st = JSON.parse(fs.readFileSync(stateFile, 'utf8')); } catch { /* primera vez */ }
@@ -102,7 +108,7 @@ function exportPack(dir, profile) {
     included.push(item);
   }
   fs.writeFileSync(path.join(dir, 'pack.json'), JSON.stringify({
-    id: profile.id, name: profile.name, mc: profile.mc, forge: profile.forge || '', server: profile.server || '', version
+    id: profile.id, name: profile.name, mc: profile.mc, forge: profile.forge || '', server: profile.server || '', ...(profile.loader === 'fabric' ? { loader: 'fabric', fabric: profile.fabric || '' } : {}), version
   }, null, 2));
   return { version, included };
 }
