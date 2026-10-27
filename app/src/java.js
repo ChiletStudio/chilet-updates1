@@ -63,26 +63,51 @@ function candidates() {
   return list;
 }
 
-// Devuelve { path, major } o null. La ruta fijada por el usuario se respeta solo si su versión alcanza.
+// ¿Sirve este Java para esa versión de Minecraft? Java 8 solo para 1.16 y anteriores (Forge viejo no arranca con otro);
+// desde 1.17 se aceptan el Java que pide el juego y los 4 siguientes (p. ej. con Java 17 como mínimo, valen 17 a 21).
+const compatible = (m, required) => required <= 8 ? m === 8 : (m >= required && m <= required + 4);
+
+// Devuelve { path, major } o null. La ruta fijada por el usuario se respeta si su versión sirve.
 const cacheFile = () => path.join(paths.base(), 'java-cache.json');
 function cacheGet(required) {
-  try { const h = (JSON.parse(fs.readFileSync(cacheFile(), 'utf8')) || {})[required]; if (h && fs.statSync(h.path).mtimeMs === h.t) return { path: h.path, major: required }; } catch { /* sin caché */ }
+  try {
+    const h = (JSON.parse(fs.readFileSync(cacheFile(), 'utf8')) || {})[required];
+    const m = Number(h && h.major) || required;
+    if (h && compatible(m, required) && fs.statSync(h.path).mtimeMs === h.t) return { path: h.path, major: m };
+  } catch { /* sin caché */ }
   return null;
 }
-function cacheSet(required, p) {
-  try { if (!path.isAbsolute(p)) return; let c = {}; try { c = JSON.parse(fs.readFileSync(cacheFile(), 'utf8')) || {}; } catch { /* nuevo */ } c[required] = { path: p, t: fs.statSync(p).mtimeMs }; fs.mkdirSync(paths.base(), { recursive: true }); fs.writeFileSync(cacheFile(), JSON.stringify(c)); } catch { /* no crítico */ }
+function cacheSet(required, p, m) {
+  try {
+    if (!path.isAbsolute(p)) return;
+    let c = {}; try { c = JSON.parse(fs.readFileSync(cacheFile(), 'utf8')) || {}; } catch { /* nuevo */ }
+    c[required] = { path: p, major: m, t: fs.statSync(p).mtimeMs };
+    fs.mkdirSync(paths.base(), { recursive: true }); fs.writeFileSync(cacheFile(), JSON.stringify(c));
+  } catch { /* no crítico */ }
 }
+// Mira TODOS los Java instalados a la vez y devuelve [{ path, major }] (sin repetidos).
+async function installed() {
+  const seen = new Set();
+  const list = candidates().filter(c => (c === 'java' || fs.existsSync(c)) && !seen.has(c) && seen.add(c));
+  const res = await Promise.all(list.map(async c => ({ path: c, major: await major(c) })));
+  return res.filter(r => r.major > 0);
+}
+// Prefiere el Java exacto que pide el juego; si no hay, el compatible más bajo (así no hace falta instalar nada).
 async function find(custom, required = 17) {
   if (custom && fs.existsSync(custom)) {
     const m = await major(custom);
-    if (m >= required) return { path: custom, major: m };
+    if (m >= required) return { path: custom, major: m };   // lo fijado a mano se respeta aunque sea más nuevo
   }
   const hit = cacheGet(required); if (hit) return hit;
-  for (const c of candidates()) {
-    if (c !== 'java' && !fs.existsSync(c)) continue;
-    if (await major(c) === required) { cacheSet(required, c); return { path: c, major: required }; }
-  }
+  const all = await installed();
+  const pick = all.find(x => x.major === required) || all.filter(x => compatible(x.major, required)).sort((a, b) => a.major - b.major)[0];
+  if (pick) { cacheSet(required, pick.path, pick.major); return pick; }
   return null;
+}
+// Último recurso (si no se pudo descargar nada): cualquier Java igual o más nuevo que el pedido.
+async function findAny(required) {
+  const all = (await installed()).filter(x => required <= 8 ? x.major >= 8 : x.major >= required).sort((a, b) => a.major - b.major);
+  return all[0] || null;
 }
 
 function run(cmd, args) {
@@ -93,24 +118,72 @@ function run(cmd, args) {
     });
   });
 }
-
-// Descarga Temurin JRE <required> (Adoptium) dentro de la carpeta de la app (una carpeta por versión).
-async function installManaged(required, onProgress) {
-  const osName = { win32: 'windows', darwin: 'mac', linux: 'linux' }[process.platform];
-  const arch = process.arch === 'arm64' ? 'aarch64' : 'x64';
-  if (!osName) throw new Error('Sistema no soportado para descarga automática de Java.');
-  const url = `https://api.adoptium.net/v3/binary/latest/${required}/ga/${osName}/${arch}/jre/hotspot/normal/eclipse`;
-  const archive = path.join(paths.cache(), isWin ? `java${required}.zip` : `java${required}.tar.gz`);
-  await download(url, archive, (d, t) => onProgress && onProgress(t ? d / t : null));
-  const dir = path.join(paths.runtime(), `java${required}`);
-  fs.rmSync(dir, { recursive: true, force: true });
-  fs.mkdirSync(dir, { recursive: true });
-  await run('tar', ['-xf', archive, '-C', dir]); // tar (bsdtar) viene en Windows 10+
-  fs.rmSync(archive, { force: true });
-  for (const bin of scan(dir, 4)) {
-    if (await major(bin) === required) return { path: bin, major: required };
+async function extract(archive, dir) {
+  try { await run('tar', ['-xf', archive, '-C', dir]); return; }   // tar (bsdtar) viene en Windows 10+
+  catch (e) {
+    if (!isWin || !/\.zip$/i.test(archive)) throw e;
+    // PCs sin tar: PowerShell sabe abrir .zip
+    await run('powershell', ['-NoProfile', '-NonInteractive', '-Command', `Expand-Archive -LiteralPath '${archive.replace(/'/g, "''")}' -DestinationPath '${dir.replace(/'/g, "''")}' -Force`]);
   }
-  throw new Error(`Se descargó Java ${required} pero no se encontró el ejecutable.`);
 }
 
-module.exports = { find, installManaged, requiredJava };
+// De dónde se puede bajar un Java si no hay ninguno que sirva. Si una fuente falla, se prueba la siguiente.
+function sources(required) {
+  const osName = { win32: 'windows', darwin: 'mac', linux: 'linux' }[process.platform];
+  const arch = process.arch === 'arm64' ? 'aarch64' : 'x64';
+  const ext = isWin ? 'zip' : 'tar.gz';
+  const list = [
+    { name: 'Adoptium', url: async () => `https://api.adoptium.net/v3/binary/latest/${required}/ga/${osName}/${arch}/jre/hotspot/normal/eclipse` },
+    { name: 'Azul Zulu', url: async () => {
+      const q = `https://api.azul.com/metadata/v1/zulu/packages/?java_version=${required}&os=${osName === 'mac' ? 'macos' : osName}&arch=${arch === 'x64' ? 'x86' : 'arm'}&hw_bitness=64&archive_type=${ext}&java_package_type=jre&javafx_bundled=false&latest=true&release_status=ga&availability_types=CA&page_size=1`;
+      const r = await fetch(q, { signal: AbortSignal.timeout(20000) });
+      if (!r.ok) throw new Error('Azul respondió ' + r.status);
+      const j = await r.json(); const u = Array.isArray(j) && j[0] && j[0].download_url;
+      if (!u) throw new Error('Azul no tiene Java ' + required + ' para este sistema');
+      return u;
+    } }
+  ];
+  if ([17, 21, 25].includes(required)) list.push({ name: 'Microsoft OpenJDK', url: async () => `https://aka.ms/download-jdk/microsoft-jdk-${required}-${osName === 'mac' ? 'macOS' : osName}-${arch}.${ext}` });
+  return { list, osName, ext };
+}
+
+// Descarga un Java <required> dentro de la carpeta de la app (una carpeta por versión). Prueba varias fuentes y reintenta.
+async function installManaged(required, onProgress, log = () => {}) {
+  const { list, osName, ext } = sources(required);
+  if (!osName) throw new Error('Sistema no soportado para descarga automática de Java.');
+  const archive = path.join(paths.cache(), `java${required}.${ext}`);
+  const dir = path.join(paths.runtime(), `java${required}`);
+  const errors = [];
+  for (const src of list) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        log(`[java] descargando Java ${required} (${src.name}${attempt > 1 ? ', reintento' : ''})…`);
+        await download(await src.url(), archive, (d, t) => onProgress && onProgress(t ? d / t : null));
+        fs.rmSync(dir, { recursive: true, force: true });
+        fs.mkdirSync(dir, { recursive: true });
+        await extract(archive, dir);
+        fs.rmSync(archive, { force: true });
+        for (const bin of scan(dir, 5)) {
+          const m = await major(bin);
+          if (m === required) { cacheSet(required, bin, m); return { path: bin, major: m }; }
+        }
+        throw new Error('se descargó pero no se encontró el ejecutable');
+      } catch (e) { errors.push(`${src.name}: ${e?.message || e}`); log(`[java] ${src.name} falló: ${e?.message || e}`); fs.rmSync(archive, { force: true }); }
+    }
+  }
+  throw new Error(`No se pudo conseguir Java ${required} (${errors.slice(-3).join(' | ')}). Revisa tu internet o el antivirus y vuelve a pulsar Jugar.`);
+}
+
+// Todo en uno para Jugar: usa el Java que ya tengas si sirve; si no, lo baja solo; si no se puede bajar, usa cualquier Java más nuevo antes que fallar.
+async function ensure(custom, required, onProgress, log = () => {}) {
+  const have = await find(custom, required);
+  if (have) { if (have.major !== required) log(`[java] se usa el Java ${have.major} que ya tienes instalado (el juego pide ${required}).`); return have; }
+  try { return await installManaged(required, onProgress, log); }
+  catch (e) {
+    const any = await findAny(required);
+    if (any) { log(`[java] no se pudo bajar Java ${required} (${e?.message || e}). Se prueba con el Java ${any.major} que ya tienes.`); return any; }
+    throw e;
+  }
+}
+
+module.exports = { find, findAny, installManaged, ensure, requiredJava, compatible };
