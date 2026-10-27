@@ -238,20 +238,21 @@ ipcMain.handle('profile:logo', (_e, id) => pickMedia(id, 'logo'));
 ipcMain.handle('data:open', async () => { await shell.openPath(paths.base()); return { ok: true }; });
 
 // ---------- Mods de menú (FancyMenu + Drippy + librerías) ----------
-ipcMain.handle('mods:menu', async () => {
+ipcMain.handle('mods:menu', (_e, starter) => modsInstall(!!starter));
+async function modsInstall(starter) {
   if (!ownerUnlocked) return DENIED;
   if (running || installing) return { ok: false, error: 'Espera a que termine lo que está en marcha.' };
   const s = settings.read();
   const p = s.profiles.find(x => x.id === s.activeProfile);
-  if (p.loader === 'fabric') return { ok: false, error: 'Este modpack usa Fabric: los mods de menú automáticos son solo de Forge. Pon los mods de Fabric a mano en la carpeta mods.' };
-  if (!p.forge) return { ok: false, error: 'Este modpack es vanilla: los mods de menú necesitan Forge.' };
+  const isFabric = p.loader === 'fabric';
+  if (!p.forge && !isFabric) return { ok: false, error: 'Este modpack es vanilla: los mods de menú necesitan Forge o Fabric.' };
   installing = true;
   try {
     const r = await modsMod.installMenuMods({
-      profileId: p.id, mc: p.mc, onLog: log,
+      profileId: p.id, mc: p.mc, loader: isFabric ? 'fabric' : 'forge', starter, onLog: log,
       onProgress: (msg, pct) => progress('mods', msg, pct)
     });
-    progress('idle', `Mods de menú listos (${r.installed.length} archivos).`);
+    progress('idle', `${starter ? 'Mods base' : 'Mods de menú'} listos (${r.installed.length} archivos).`);
     return { ok: true, ...r };
   } catch (e) {
     const msg = e?.message || String(e);
@@ -259,7 +260,7 @@ ipcMain.handle('mods:menu', async () => {
     progress('error', msg);
     return { ok: false, error: msg };
   } finally { installing = false; }
-});
+}
 
 // ---------- Compartir el modpack ----------
 // Conexión con tu GitHub (solo creador). El token se guarda cifrado con el sistema (DPAPI en Windows) en tu carpeta de datos.
@@ -288,27 +289,61 @@ ipcMain.handle('pub:set', async (_e, d) => {
   const check = await remoteMod.verifyGithub({ user, repo, token });   // se guarda siempre; además se comprueba contra GitHub para avisar de inmediato si no sirve
   return { ok: true, check };
 });
+// Publica el modpack activo (lo usa el botón y la publicación automática).
+let publishBusy = false;
+const autoPubFile = () => path.join(app.getPath('userData'), 'autopub.json');
+const readAutoPub = () => { try { return JSON.parse(fs.readFileSync(autoPubFile(), 'utf8')) || {}; } catch { return {}; } };
+const pubFingerprint = p => remoteMod.fingerprint(p, JSON.stringify(readEvents()) + '|' + socialMod.url());
+async function doPublish(p, say) {
+  const outDir = path.join(app.getPath('documents'), 'ChiletStudio-Publicar');
+  say('Preparando archivos…');
+  const fp = pubFingerprint(p);   // huella tomada ANTES de preparar: si algo cambia mientras sube, la próxima vez se vuelve a publicar
+  let appB = null;
+  try { appB = appUpdateMod.buildBundle(app.getAppPath(), SHELL); say(appB.changed ? 'Código del launcher: hay cambios, se publica y firma.' : 'Código del launcher: sin cambios.'); }
+  catch (e) { say('Aviso: el launcher no se publicó (' + (e?.message || e) + ').'); }
+  const r = remoteMod.publish(p, outDir, { events: readEvents(), social: socialMod.url(), app: appB });
+  say('Comprobando mods pesados en Modrinth…');
+  await remoteMod.verifyExternal(r.external);
+  const cfg = readPub();
+  if (!cfg.user || !cfg.repo || !cfg.token) return { ok: true, manual: true, dir: outDir, ...r };
+  const u = await remoteMod.upload(cfg, outDir, say);
+  if (u.branch !== cfg.branch) writePub({ ...cfg, branch: u.branch });
+  try { const m = readAutoPub(); m[p.id] = fp; fs.writeFileSync(autoPubFile(), JSON.stringify(m)); } catch { /* no crítico */ }
+  return { ok: true, manual: false, external: r.external.map(e => e.filename), skipped: r.skipped, ...u };
+}
 ipcMain.handle('pack:publish', async () => {
   if (!ownerUnlocked) return DENIED;
+  if (publishBusy) return { ok: false, error: 'Ya se está publicando, espera un momento.' };
   const s = settings.read();
   const p = s.profiles.find(x => x.id === s.activeProfile);
-  const outDir = path.join(app.getPath('documents'), 'ChiletStudio-Publicar');
   const say = m => { try { win.webContents.send('pub:progress', m); } catch { /* ventana cerrada */ } };
+  publishBusy = true;
   try {
-    say('Preparando archivos…');
-    let appB = null;
-    try { appB = appUpdateMod.buildBundle(app.getAppPath(), SHELL); say(appB.changed ? 'Código del launcher: hay cambios, se publica y firma.' : 'Código del launcher: sin cambios.'); }
-    catch (e) { say('Aviso: el launcher no se publicó (' + (e?.message || e) + ').'); }
-    const r = remoteMod.publish(p, outDir, { events: readEvents(), social: socialMod.url(), app: appB });
-    say('Comprobando mods pesados en Modrinth…');
-    await remoteMod.verifyExternal(r.external);
-    const cfg = readPub();
-    if (!cfg.user || !cfg.repo || !cfg.token) { shell.openPath(outDir); return { ok: true, manual: true, dir: outDir, ...r }; }
-    const u = await remoteMod.upload(cfg, outDir, say);
-    if (u.branch !== cfg.branch) writePub({ ...cfg, branch: u.branch });
-    return { ok: true, manual: false, external: r.external.map(e => e.filename), skipped: r.skipped, ...u };
+    const r = await doPublish(p, say);
+    if (r.manual) shell.openPath(r.dir);
+    return r;
   } catch (e) { return { ok: false, error: e?.message || String(e) }; }
+  finally { publishBusy = false; }
 });
+// Al cerrar Minecraft (versión de creador): si cambiaste mods, menú o config desde la última publicación, se sube sola y todos la reciben.
+async function autoPublish(p) {
+  try {
+    if (IS_PLAYER || !ownerUnlocked || publishBusy || !p || settings.read().autoPublish === false) return;
+    const cfg = readPub();
+    if (!cfg.user || !cfg.repo || !cfg.token) return;   // sin GitHub conectado no hay a dónde subir
+    if (readAutoPub()[p.id] === pubFingerprint(p)) return;   // nada nuevo
+    publishBusy = true;
+    const say = m => { try { win.webContents.send('pub:progress', m); } catch { /* ventana cerrada */ } };
+    log('[publicar] Cambios detectados en mods/config: se publican solos para todos los jugadores…');
+    const r = await doPublish(p, say);
+    if (r.manual) return;
+    const msg = `Cambios publicados para todos (${r.uploaded} de ${r.total} archivos subidos). Los jugadores los reciben al abrir el launcher.`;
+    log('[publicar] ' + msg); say(msg);
+  } catch (e) {
+    const msg = 'No se pudo publicar solo (' + (e?.message || e) + '). Puedes usar "Publicar actualización" a mano.';
+    log('[publicar] ' + msg); try { win.webContents.send('pub:progress', msg); } catch { /* ventana cerrada */ }
+  } finally { publishBusy = false; }
+}
 ipcMain.handle('pack:export', () => {
   if (!ownerUnlocked) return DENIED;
   if (running || installing) return { ok: false, error: 'Espera a que termine lo que está en marcha.' };
@@ -495,7 +530,7 @@ ipcMain.handle('play', async (_e, mode) => {
     guardMod.preflight(log);
 
     // 0) El modpack incluido en la app: se repara/actualiza justo antes de jugar y se deja un diagnóstico en la Consola.
-    try { packMod.sync(packDir(), log); } catch (e) { log('[modpack] error: ' + (e?.message || e)); }
+    try { packMod.sync(packDir(), log, { seedOnly: !IS_PLAYER }); } catch (e) { log('[modpack] error: ' + (e?.message || e)); }
     const syncP = remoteSync(log, modsProgress);   // se descarga mientras se comprueba la cuenta y Java (no uno detrás del otro)
     // 1) Cuenta
     let auth;
@@ -521,11 +556,8 @@ ipcMain.handle('play', async (_e, mode) => {
     const need = javaMod.requiredJava(profile.mc);
     progress('java', `Buscando Java ${need}…`);
     if (s.javaPath) log(`Nota: si el Java fijado en Ajustes es anterior a Java ${need}, se ignora.`);
-    let java = await javaMod.find(s.javaPath, need);
-    if (!java) {
-      progress('java', `Descargando Java ${need}…`, 0);
-      java = await javaMod.installManaged(need, p => progress('java', `Descargando Java ${need}…`, p == null ? null : Math.round(p * 100)));
-    }
+    // Usa el Java que ya tengas si sirve; solo si no hay ninguno lo baja solo (no hace falta instalar nada a mano).
+    const java = await javaMod.ensure(s.javaPath, need, p => progress('java', `Descargando Java ${need}…`, p == null ? null : Math.round(p * 100)), log);
     log(`Java: ${java.path} (v${java.major})`); lap('Java');
 
     await syncP; lap('mods al día');
@@ -566,6 +598,8 @@ ipcMain.handle('play', async (_e, mode) => {
         progress('forge', 'Preparando Fabric…', 0);
         const fv = profile.fabric || await fabricMod.latestLoader(profile.mc);
         const id = await fabricMod.ensure(profile.mc, fv, log);
+        if (!IS_PLAYER) { try { await modsMod.ensureFabricApi({ profileId: profile.id, mc: profile.mc, onLog: log, onProgress: (m, p) => progress('mods', m, p) }); } catch (e) { log('[fabric] aviso: ' + (e?.message || e)); } }
+        else if (!modsMod.hasFabricApi(profile.id)) log('[fabric] aviso: no hay Fabric API en la carpeta mods; si el juego se cierra, el creador debe publicar una actualización con ella.');
         if (!profile.fabric) settings.upsertProfile({ ...profile, fabric: fv });   // se fija la versión para que todos usen la misma
         forge = { mode: 'installer', id };   // misma vía que Forge ya instalado: versión "custom" con inheritsFrom
       }
@@ -600,6 +634,7 @@ ipcMain.handle('play', async (_e, mode) => {
           }
           if (startedAt) { try { playlog.add(profile, Date.now() - startedAt); } catch { /* sin registro */ } startedAt = 0; }
         send('chilet:closed', code);
+          if (!IS_PLAYER && (code === 0 || code === null) && !crashed) autoPublish(profile);   // solo si el juego cerró bien: un mod que hizo fallar el juego no se reparte
         }
       });
     };
@@ -676,7 +711,7 @@ app.whenReady().then(() => {
   });
   // Modpack incluido en la app: se instala/actualiza solo antes de abrir la ventana.
   const bootLog = [];
-  try { packMod.sync(packDir(), m => bootLog.push(m)); } catch (e) { bootLog.push('[modpack] error: ' + (e?.message || e)); }
+  try { packMod.sync(packDir(), m => bootLog.push(m), { seedOnly: !IS_PLAYER }); } catch (e) { bootLog.push('[modpack] error: ' + (e?.message || e)); }
   // Al abrir el launcher ya se bajan los mods nuevos en segundo plano: así, al pulsar Jugar normalmente ya está todo listo.
   remoteSync(m => bootLog.push(m), (d, t) => { if (!running) modsProgress(d, t); }).finally(() => { if (!running) progress('idle', ''); send('chilet:refresh'); });   // avisa a la interfaz: ya hay fotos, portada, mods y servidor nuevos
   if (IS_PLAYER && !updateUrl()) { try { packMod.verify(packDir(), m => bootLog.push(m)); } catch { /* se reintenta al jugar */ } }
