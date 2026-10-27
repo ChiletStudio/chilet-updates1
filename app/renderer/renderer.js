@@ -161,6 +161,7 @@ function render() {
   $('#ram').value = s.ramMax;
   $('#fullscreen').checked = !!s.fullscreen;
   $('#alwaysOffline').checked = !!s.alwaysOffline;
+  $('#autoPublish').checked = s.autoPublish !== false;
   $('#ramValue').textContent = s.ramMax;
   $('#forgeMode').value = s.forgeMode;
   $('#loginMode').value = s.loginMode;
@@ -424,14 +425,16 @@ $('#exportPack').addEventListener('click', async () => {
   const r = await api.exportPack();
   setStatus(r.ok ? `Modpack listo (versión ${r.version}). Ahora usa Crear_EXE.bat.` : r.error);
 });
-$('#btnMods').addEventListener('click', async () => {
+const installMods = starter => async () => {
   busy = true; setBusy(true);
   $('#progressBox').classList.remove('hidden');
-  const r = await api.installMenuMods();
+  const r = await api.installMenuMods(starter);
   busy = false; state = await api.getState(); render();
-  if (r.ok) setStatus('Mods de menú instalados: ' + r.installed.join(', '));
+  if (r.ok) setStatus((starter ? 'Mods base instalados: ' : 'Mods de menú instalados: ') + r.installed.join(', '));
   else setStatus(r.error);
-});
+};
+$('#btnMods').addEventListener('click', installMods(false));
+$('#btnStarter').addEventListener('click', installMods(true));
 $('#btnEdit').addEventListener('click', () => {
   const p = activeProfile();
   $('#editName').value = p.name;
@@ -543,6 +546,7 @@ $('#createPack').addEventListener('click', async () => {
 $('#ram').addEventListener('input', e => { $('#ramValue').textContent = e.target.value; });
 $('#ram').addEventListener('change', async e => { state = await api.updateSettings({ ramMax: Number(e.target.value) }); render(); });
 $('#alwaysOffline').addEventListener('change', async e => { state = await api.updateSettings({ alwaysOffline: e.target.checked }); render(); });
+$('#autoPublish').addEventListener('change', async e => { state = await api.updateSettings({ autoPublish: e.target.checked }); render(); });
 $('#fullscreen').addEventListener('change', async e => { state = await api.updateSettings({ fullscreen: e.target.checked }); render(); });
 $('#loginMode').addEventListener('change', async e => { state = await api.updateSettings({ loginMode: e.target.value }); render(); });
 $('#forgeMode').addEventListener('change', async e => { state = await api.updateSettings({ forgeMode: e.target.value }); render(); });
@@ -555,7 +559,7 @@ $('#javaAuto').addEventListener('click', async () => { state = await api.updateS
 $('#javaCheck').addEventListener('click', async () => {
   setStatus('Buscando Java…');
   const { need, found } = await api.checkJava();
-  $('#javaInfo').textContent = found ? `Encontrado para el modpack activo (necesita Java ${need}): ${found.path}` : `No se encontró Java ${need}. Se descargará al pulsar JUGAR.`;
+  $('#javaInfo').textContent = found ? `Listo: el modpack activo pide Java ${need} y se usará el Java ${found.major} de ${found.path}` : `No hay un Java que sirva (pide ${need}). No hace falta instalar nada: se descarga solo al pulsar JUGAR.`;
   setStatus('Listo.');
 });
 $('#openData').addEventListener('click', () => api.openDataFolder());
