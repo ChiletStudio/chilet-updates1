@@ -27,6 +27,24 @@ function walk(dir, base, out = []) {
   return out;
 }
 
+// CREADOR: huella de lo que se publicaría (mods, config, iconos y datos del modpack). Si no cambió desde la última publicación, no hay nada que subir.
+// Mods y archivos grandes: nombre + tamaño + fecha. Config pequeña: contenido (así no cuenta que el juego la reescriba igual).
+function fingerprint(profile, extra = '') {
+  const inst = paths.instance(profile.id);
+  const rels = [...DIRS.flatMap(d => walk(path.join(inst, d), inst)), ...ICONS.filter(i => fs.existsSync(path.join(inst, i)))].filter(r => okRel(r) && !/\.(db|log)$/i.test(r)).sort();
+  const h = crypto.createHash('sha1');
+  h.update(JSON.stringify([profile.name, profile.mc, profile.forge || '', profile.server || '', profile.loader || '', profile.fabric || '', extra]));
+  for (const rel of rels) {
+    const abs = path.join(inst, rel);
+    try {
+      const st = fs.statSync(abs);
+      if (rel.startsWith('mods/') || st.size > 2 * 1024 * 1024) h.update(`${rel}|${st.size}|${Math.floor(st.mtimeMs)}\n`);
+      else h.update(`${rel}|${st.size}|${sha1(fs.readFileSync(abs))}\n`);
+    } catch { /* el archivo cambió mientras se leía: la próxima vez */ }
+  }
+  return h.digest('hex');
+}
+
 // CREADOR: genera outDir/latest.json + outDir/files/... a partir del modpack activo.
 function publish(profile, outDir, extras = {}) {
   const inst = paths.instance(profile.id);
@@ -240,4 +258,4 @@ async function upload(cfg, outDir, log = () => {}) {
   await put('latest.json', manifestRaw, 'Nueva versión del modpack');   // al final: así nadie ve la lista antes de que estén los archivos
   return { uploaded: todo.length, total: files.length, appUploaded: appTodo.length, branch };
 }
-module.exports = { publish, sync, upload, verifyExternal, verifyGithub };
+module.exports = { fingerprint, publish, sync, upload, verifyExternal, verifyGithub };
