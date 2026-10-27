@@ -16,6 +16,12 @@ const MENU_MODS = [
   { id: 'melody', required: false }
 ];
 
+// Mods base de cada cargador (rendimiento + menú). Solo FancyMenu y Fabric API son obligatorios; el resto se omite si no existe para esa versión.
+const STARTER = {
+  forge: [{ id: 'fancymenu', required: true }, { id: 'drippy-loading-screen', required: false }, { id: 'embeddium', required: false }, { id: 'ferrite-core', required: false }, { id: 'modernfix', required: false }],
+  fabric: [{ id: 'fabric-api', required: true }, { id: 'fancymenu', required: true }, { id: 'drippy-loading-screen', required: false }, { id: 'sodium', required: false }, { id: 'lithium', required: false }, { id: 'ferrite-core', required: false }, { id: 'modmenu', required: false }]
+};
+
 async function api(p) {
   const r = await fetch(API + p, { headers: HEADERS });
   if (!r.ok) throw new Error(`Modrinth respondió ${r.status} (${p})`);
@@ -38,11 +44,11 @@ function sha512(file) {
 }
 
 // Descarga los mods de menú (y sus dependencias obligatorias) a instances/<id>/mods, verificando el hash sha512.
-async function installMenuMods({ profileId, mc, loader = 'forge', onLog = () => {}, onProgress = () => {} }) {
+async function installMenuMods({ profileId, mc, loader = 'forge', starter = false, onLog = () => {}, onProgress = () => {} }) {
   const modsDir = path.join(paths.instance(profileId), 'mods');
   fs.mkdirSync(modsDir, { recursive: true });
 
-  const queue = MENU_MODS.map(m => ({ ...m }));
+  const queue = (starter ? STARTER[loader === 'fabric' ? 'fabric' : 'forge'] : [...(loader === 'fabric' ? [{ id: 'fabric-api', required: true }] : []), ...MENU_MODS]).map(m => ({ ...m }));   // Fabric necesita además Fabric API
   const seen = new Set();
   const installed = [];
   const skipped = [];
@@ -91,4 +97,27 @@ async function installMenuMods({ profileId, mc, loader = 'forge', onLog = () => 
   return { installed, skipped };
 }
 
-module.exports = { installMenuMods };
+// Fabric API: casi todos los mods de Fabric la piden. Si falta en la carpeta mods, se baja la de esa versión de Minecraft.
+const hasFabricApi = profileId => { try { return fs.readdirSync(path.join(paths.instance(profileId), 'mods')).some(f => /^fabric-api.*\.jar$/i.test(f)); } catch { return false; } };
+async function ensureFabricApi({ profileId, mc, onLog = () => {}, onProgress = () => {} }) {
+  if (hasFabricApi(profileId)) return false;
+  onLog('[fabric] falta Fabric API en la carpeta mods: se descarga sola.');
+  const modsDir = path.join(paths.instance(profileId), 'mods');
+  fs.mkdirSync(modsDir, { recursive: true });
+  const v = await pickVersion('fabric-api', mc, 'fabric');
+  if (!v) throw new Error(`Fabric API todavía no existe para Minecraft ${mc}.`);
+  const file = (v.files || []).find(f => f.primary) || (v.files || [])[0];
+  const name = file && path.basename(String(file.filename));
+  if (!name || !name.toLowerCase().endsWith('.jar')) throw new Error('Fabric API no trae un archivo descargable.');
+  let host = ''; try { host = new URL(file.url).hostname; } catch { /* url inválida */ }
+  if (host !== 'cdn.modrinth.com') throw new Error('Descarga de origen no esperado: ' + (host || file.url));
+  const dest = path.join(modsDir, name);
+  onProgress(`Descargando ${name}…`, 0);
+  await download(file.url, dest, (d, t) => onProgress(`Descargando ${name}…`, t ? Math.round((d / t) * 100) : null));
+  const expected = file.hashes && file.hashes.sha512;
+  if (expected && await sha512(dest) !== expected) { fs.rmSync(dest, { force: true }); throw new Error(`${name} llegó dañado. Intenta de nuevo.`); }
+  onLog(`[fabric] ${name}: instalado.`);
+  return true;
+}
+
+module.exports = { installMenuMods, ensureFabricApi, hasFabricApi };
