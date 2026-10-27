@@ -25,7 +25,7 @@ contextBridge.exposeInMainWorld('chilet', {
   onPublishProgress: cb => ipcRenderer.on('pub:progress', (_e, m) => cb(m)),
   publishPack: () => ipcRenderer.invoke('pack:publish'),
   exportPack: () => ipcRenderer.invoke('pack:export'),
-  installMenuMods: () => ipcRenderer.invoke('mods:menu'),
+  installMenuMods: starter => ipcRenderer.invoke('mods:menu', !!starter),
   faceGet: n => ipcRenderer.invoke('face:get', n),
   eventsList: () => ipcRenderer.invoke('events:list'),
   eventsSave: l => ipcRenderer.invoke('events:save', l),
