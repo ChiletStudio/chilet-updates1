@@ -240,7 +240,7 @@ input[type=password]{background:#101013;color:#f5f5f7;border:1px solid rgba(255,
 ::selection{background:hsl(355 85% 62% / .55)}
 
 /* versión de jugador: nada de edición */
-body.player #btnCreate,body.player #btnFolder,body.player #btnMods,body.player #btnEdit,body.player #btnRemove,body.player #btnIcon,body.player #ownerPanel{display:none!important}
+body.player #btnCreate,body.player #btnFolder,body.player #btnMods,body.player #btnStarter,body.player #btnEdit,body.player #btnRemove,body.player #btnIcon,body.player #ownerPanel{display:none!important}
 
 /* "Jugar" al pasar el cursor por la tarjeta */
 .card-play{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,rgba(14,14,17,.1),rgba(14,14,17,.55));opacity:0;transition:opacity .15s}
