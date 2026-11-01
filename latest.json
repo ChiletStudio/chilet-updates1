@@ -1,29 +1,29 @@
 {
- "version": 1793557225,
+ "version": 1793563101,
  "profile": {
-  "id": "pmvy3vvrk",
-  "name": "prueba",
+  "id": "pmvy94y8y",
+  "name": "viltrumite",
   "mc": "1.21.1",
   "forge": "",
   "server": "",
   "loader": "fabric",
-  "fabric": "0.20.1"
+  "fabric": ""
  },
  "files": [
   {
-   "p": "mods/fabric-api-0.116.17+1.21.1 (1).jar",
-   "size": 2452735,
-   "sha1": "810b2b0195371a012906241d8b85a32a1d6de53c"
+   "p": "mods/TizioSpaceProject-FORGE-1.20.1-v3.4.jar",
+   "size": 33031306,
+   "sha1": "00cebc5f60d8ff196c71b3430d27c3f37db6358f"
   },
   {
-   "p": "mods/viajeespacial-1.0.0.jar",
-   "size": 2448476,
-   "sha1": "e24733df26e7119a39c6d4dfb8a454cba82a2b18"
+   "p": "mods/viltrumitecore-1.11.2-forge-1.20.1.jar",
+   "size": 1046744,
+   "sha1": "01e984ac27c886dca10568b9a7a730205dfe8f21"
   },
   {
-   "p": "config/fabric/indigo-renderer.properties",
-   "size": 290,
-   "sha1": "4fc744d404d0ed3b03546a7d779749d220cc1c38"
+   "p": "mods/viltrumiteflight-1.6.9-forge-1.20.1.jar",
+   "size": 346132,
+   "sha1": "e0c23627cb5bce3d92e93795785aad73a4419b6f"
   }
  ],
  "external": [],
