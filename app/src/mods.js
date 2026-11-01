@@ -16,12 +16,6 @@ const MENU_MODS = [
   { id: 'melody', required: false }
 ];
 
-// Mods base de cada cargador (rendimiento + menú). Solo FancyMenu y Fabric API son obligatorios; el resto se omite si no existe para esa versión.
-const STARTER = {
-  forge: [{ id: 'fancymenu', required: true }, { id: 'drippy-loading-screen', required: false }, { id: 'embeddium', required: false }, { id: 'ferrite-core', required: false }, { id: 'modernfix', required: false }],
-  fabric: [{ id: 'fabric-api', required: true }, { id: 'fancymenu', required: true }, { id: 'drippy-loading-screen', required: false }, { id: 'sodium', required: false }, { id: 'lithium', required: false }, { id: 'ferrite-core', required: false }, { id: 'modmenu', required: false }]
-};
-
 async function api(p) {
   const r = await fetch(API + p, { headers: HEADERS });
   if (!r.ok) throw new Error(`Modrinth respondió ${r.status} (${p})`);
@@ -44,11 +38,11 @@ function sha512(file) {
 }
 
 // Descarga los mods de menú (y sus dependencias obligatorias) a instances/<id>/mods, verificando el hash sha512.
-async function installMenuMods({ profileId, mc, loader = 'forge', starter = false, onLog = () => {}, onProgress = () => {} }) {
+async function installMenuMods({ profileId, mc, loader = 'forge', onLog = () => {}, onProgress = () => {} }) {
   const modsDir = path.join(paths.instance(profileId), 'mods');
   fs.mkdirSync(modsDir, { recursive: true });
 
-  const queue = (starter ? STARTER[loader === 'fabric' ? 'fabric' : 'forge'] : [...(loader === 'fabric' ? [{ id: 'fabric-api', required: true }] : []), ...MENU_MODS]).map(m => ({ ...m }));   // Fabric necesita además Fabric API
+  const queue = [...(loader === 'fabric' ? [{ id: 'fabric-api', required: true }] : []), ...MENU_MODS].map(m => ({ ...m }));   // Fabric necesita además Fabric API
   const seen = new Set();
   const installed = [];
   const skipped = [];
