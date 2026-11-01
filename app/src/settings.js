@@ -42,6 +42,7 @@ function update(patch) {
   if (Number.isFinite(patch.ramMax)) s.ramMax = Math.min(32, Math.max(1, Math.round(patch.ramMax)));
   if (typeof patch.fullscreen === 'boolean') s.fullscreen = patch.fullscreen;
   if (typeof patch.alwaysOffline === 'boolean') s.alwaysOffline = patch.alwaysOffline;
+  if (typeof patch.presetsDone === 'boolean') s.presetsDone = patch.presetsDone;
   if (typeof patch.autoPublish === 'boolean') s.autoPublish = patch.autoPublish;
   if (typeof patch.javaPath === 'string') s.javaPath = patch.javaPath.trim();
   if (typeof patch.offlineName === 'string' && /^[A-Za-z0-9_]{3,16}$/.test(patch.offlineName)) s.offlineName = patch.offlineName;
