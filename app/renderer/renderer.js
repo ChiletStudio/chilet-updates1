@@ -404,6 +404,7 @@ for (const id of ['#btnCreate', '#btnFolder', '#btnMods', '#btnEdit', '#btnRemov
 
 // ---------- acciones ----------
 $('#btnFolder').addEventListener('click', () => api.openProfileFolder(state.settings.activeProfile));
+$('#btnModsFolder').addEventListener('click', () => { api.openModsFolder(state.settings.activeProfile); setStatus('Pon tus mods en esta carpeta. Al cerrar Minecraft se publican solos para todos (o usa Publicar actualización).'); });
 api.onPublishProgress(m => setStatus(m));
 async function paintGh() { api.socialStatus().then(x => { $('#socialUrl').value = x.url || ''; }); const c = await api.pubGet(); $('#ghUser').value = c.user; $('#ghRepo').value = c.repo; $('#ghToken').value = ''; $('#ghToken').placeholder = c.broken ? 'El token guardado no se pudo leer: pega uno NUEVO' : c.hasToken ? '(guardado; pega uno nuevo solo si quieres cambiarlo)' : 'pega tu token'; }
 $('#ghSave').addEventListener('click', async () => {
@@ -425,16 +426,14 @@ $('#exportPack').addEventListener('click', async () => {
   const r = await api.exportPack();
   setStatus(r.ok ? `Modpack listo (versión ${r.version}). Ahora usa Crear_EXE.bat.` : r.error);
 });
-const installMods = starter => async () => {
+$('#btnMods').addEventListener('click', async () => {
   busy = true; setBusy(true);
   $('#progressBox').classList.remove('hidden');
-  const r = await api.installMenuMods(starter);
+  const r = await api.installMenuMods();
   busy = false; state = await api.getState(); render();
-  if (r.ok) setStatus((starter ? 'Mods base instalados: ' : 'Mods de menú instalados: ') + r.installed.join(', '));
+  if (r.ok) setStatus('Mods de menú instalados: ' + r.installed.join(', '));
   else setStatus(r.error);
-};
-$('#btnMods').addEventListener('click', installMods(false));
-$('#btnStarter').addEventListener('click', installMods(true));
+});
 $('#btnEdit').addEventListener('click', () => {
   const p = activeProfile();
   $('#editName').value = p.name;
