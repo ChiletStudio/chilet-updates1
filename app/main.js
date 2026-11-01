@@ -191,13 +191,13 @@ ipcMain.handle('profile:delete', (_e, id) => {
   const ok = settings.removeProfile(String(id));
   return { ok, error: ok ? undefined : 'Debe quedar al menos un modpack.', state: snapshot() };
 });
-ipcMain.handle('profile:open', async (_e, id) => {
+ipcMain.handle('profile:open', async (_e, id, sub) => {
   if (!ownerUnlocked) return DENIED;
   const s = settings.read();
   if (!s.profiles.some(p => p.id === id)) return { ok: false };
   const dir = paths.instance(id);
   fs.mkdirSync(path.join(dir, 'mods'), { recursive: true });
-  await shell.openPath(dir);
+  await shell.openPath(sub === 'mods' ? path.join(dir, 'mods') : dir);
   return { ok: true };
 });
 // Elegir foto (icon) o portada (banner). Imágenes se reducen; GIF/WEBP animados y videos MP4/WEBM se copian tal cual.
@@ -238,8 +238,7 @@ ipcMain.handle('profile:logo', (_e, id) => pickMedia(id, 'logo'));
 ipcMain.handle('data:open', async () => { await shell.openPath(paths.base()); return { ok: true }; });
 
 // ---------- Mods de menú (FancyMenu + Drippy + librerías) ----------
-ipcMain.handle('mods:menu', (_e, starter) => modsInstall(!!starter));
-async function modsInstall(starter) {
+ipcMain.handle('mods:menu', async () => {
   if (!ownerUnlocked) return DENIED;
   if (running || installing) return { ok: false, error: 'Espera a que termine lo que está en marcha.' };
   const s = settings.read();
@@ -249,10 +248,10 @@ async function modsInstall(starter) {
   installing = true;
   try {
     const r = await modsMod.installMenuMods({
-      profileId: p.id, mc: p.mc, loader: isFabric ? 'fabric' : 'forge', starter, onLog: log,
+      profileId: p.id, mc: p.mc, loader: isFabric ? 'fabric' : 'forge', onLog: log,
       onProgress: (msg, pct) => progress('mods', msg, pct)
     });
-    progress('idle', `${starter ? 'Mods base' : 'Mods de menú'} listos (${r.installed.length} archivos).`);
+    progress('idle', `Mods de menú listos (${r.installed.length} archivos).`);
     return { ok: true, ...r };
   } catch (e) {
     const msg = e?.message || String(e);
@@ -260,7 +259,7 @@ async function modsInstall(starter) {
     progress('error', msg);
     return { ok: false, error: msg };
   } finally { installing = false; }
-}
+});
 
 // ---------- Compartir el modpack ----------
 // Conexión con tu GitHub (solo creador). El token se guarda cifrado con el sistema (DPAPI en Windows) en tu carpeta de datos.
@@ -709,6 +708,19 @@ app.whenReady().then(() => {
       return new Response(buf, { headers: { 'Content-Type': type, 'Accept-Ranges': 'bytes', 'Content-Length': String(total) } });
     } catch { return new Response('no', { status: 404 }); }
   });
+  // Creador: la primera vez se crean dos modpacks listos, "Forge" y "Fabric", cada uno con su carpeta de mods. Si los borras, no vuelven.
+  if (!IS_PLAYER) {
+    try {
+      const st = settings.read();
+      if (!st.presetsDone) {
+        const prev = st.activeProfile;
+        settings.upsertProfile({ id: 'base-forge', name: 'Forge 1.20.1', mc: '1.20.1', forge: '47.4.26' });
+        settings.upsertProfile({ id: 'base-fabric', name: 'Fabric 1.20.1', mc: '1.20.1', forge: '', loader: 'fabric' });
+        for (const id of ['base-forge', 'base-fabric']) fs.mkdirSync(path.join(paths.instance(id), 'mods'), { recursive: true });
+        settings.update({ activeProfile: prev, presetsDone: true });
+      }
+    } catch (e) { console.error('[modpacks base]', e?.message || e); }
+  }
   // Modpack incluido en la app: se instala/actualiza solo antes de abrir la ventana.
   const bootLog = [];
   try { packMod.sync(packDir(), m => bootLog.push(m), { seedOnly: !IS_PLAYER }); } catch (e) { bootLog.push('[modpack] error: ' + (e?.message || e)); }
