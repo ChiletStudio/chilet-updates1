@@ -1,5 +1,5 @@
 {
- "version": 1793554624,
+ "version": 1793555611,
  "profile": {
   "id": "pmvy3vvrk",
   "name": "prueba",
@@ -19,23 +19,28 @@
    "p": "mods/viajeespacial-1.0.0.jar",
    "size": 561826,
    "sha1": "ec56edc2b87c6a2cca22cba5ae1bb5bd647c4db1"
+  },
+  {
+   "p": "config/fabric/indigo-renderer.properties",
+   "size": 290,
+   "sha1": "4846562668a239114d953cbd238b6c942abfda2e"
   }
  ],
  "external": [],
  "social": "",
  "app": {
-  "v": 1793138956,
+  "v": 1793555611,
   "shell": 1,
   "files": [
    {
     "p": "main.js",
-    "size": 46424,
-    "sha256": "d7831109b3c38eeed99091748b443be7ccf69a25e2a8008a996dd7ff2f89610b"
+    "size": 47151,
+    "sha256": "958417efd3ff3b9c15975b150cdd6d6b1653cabc7186d6c1d0b066ee2e3702df"
    },
    {
     "p": "preload.js",
-    "size": 2882,
-    "sha256": "bfb26771c4d296da6483f4c61bdd01d75a6dc0a9086d66153fe30fc4d4cc5efa"
+    "size": 2938,
+    "sha256": "09c53fc4ea46b04c3ff4c92f31b42bb3e5f6313bd40b01660b6d272ce2ac8534"
    },
    {
     "p": "renderer/assets/LEEME.txt",
@@ -59,18 +64,18 @@
    },
    {
     "p": "renderer/index.html",
-    "size": 20687,
-    "sha256": "5ca4c185f418a02ff20a697f6caee3f0872e53a60bf444867223be9cab040bc4"
+    "size": 20674,
+    "sha256": "48dc5ebb8ddd0136a18f6490da4a97a19e077c07f8a074406fcb84f298aaa018"
    },
    {
     "p": "renderer/renderer.js",
-    "size": 45364,
-    "sha256": "e2fad7bc7ac0f7bd05aab82633ccaebc6cef49f0176b840438eabeb83fdf6a2d"
+    "size": 45438,
+    "sha256": "ed21ad45618765225bb99f93546f05a7a0f753cad85d47684b70ce6127cb6533"
    },
    {
     "p": "renderer/styles.css",
-    "size": 41550,
-    "sha256": "020ed0d6c7c23475080ff66cc61c5ce28e3b03787cda636464266b1ca44226a4"
+    "size": 41553,
+    "sha256": "cdab81de3f3f95a54d814f9d60ebbc184d9c9bbdbaec5292ecc5a29c9dbc4255"
    },
    {
     "p": "src/appupdate.js",
@@ -99,8 +104,8 @@
    },
    {
     "p": "src/guard.js",
-    "size": 9845,
-    "sha256": "73687caf89ec04ef0c29b9fc338608825bc43be13dfe0e040d3657fa50220967"
+    "size": 9989,
+    "sha256": "0213aaab0879dea699fab3c340050937333ae6208720b9a3e35cbe2a2060d98e"
    },
    {
     "p": "src/jarinfo.js",
@@ -119,8 +124,8 @@
    },
    {
     "p": "src/mods.js",
-    "size": 6515,
-    "sha256": "e4b7557c683de3fc986985464f71b88a088849458d272fc602c9989fa1668e2f"
+    "size": 5764,
+    "sha256": "2f98d474859ec12e017fab4994f13d89eab78b8c18b69e227980ee1c59c8c58f"
    },
    {
     "p": "src/pack.js",
@@ -144,8 +149,8 @@
    },
    {
     "p": "src/settings.js",
-    "size": 3861,
-    "sha256": "bf0e89b95ebb4ef4d6e4de6d612729e3f39e5a167a5bc434d9e559fb1ece3673"
+    "size": 3942,
+    "sha256": "d6b74b190a32870ca4a069a42905c94c898ee0ea599f953cb90da49b52b5a34d"
    },
    {
     "p": "src/skin.js",
@@ -163,6 +168,6 @@
     "sha256": "fe82c18bb5fffdcc9dc50e6cc3fd9445e4dda74f6d0fc78259fe141a56b99a6f"
    }
   ],
-  "sig": "bOqEAv+O3JC1wuZVoiOWvRjXyqq929xU2DvnXwct9X0w10Q944DoUiSTo/I5AzaNtQUmfcwqLob1ZBsooZ8cAg=="
+  "sig": "4BgPuRaQLzfC25uO+SOw2PDd2jL8bjcwd0CYD2JSm9L24mYkSBJRoOgXGKAN7hjTSUoV0vqrW/J1EVagSCaHCA=="
  }
 }
