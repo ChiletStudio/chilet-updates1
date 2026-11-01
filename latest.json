@@ -1,5 +1,5 @@
 {
- "version": 1793554292,
+ "version": 1793554464,
  "profile": {
   "id": "pmvy3vvrk",
   "name": "prueba",
@@ -7,9 +7,14 @@
   "forge": "",
   "server": "",
   "loader": "fabric",
-  "fabric": ""
+  "fabric": "0.20.1"
  },
  "files": [
+  {
+   "p": "mods/fabric-api-0.116.17+1.21.1 (1).jar",
+   "size": 2452735,
+   "sha1": "810b2b0195371a012906241d8b85a32a1d6de53c"
+  },
   {
    "p": "mods/viajeespacial-1.0.0.jar",
    "size": 561826,
