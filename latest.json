@@ -1,5 +1,5 @@
 {
- "version": 1793555611,
+ "version": 1793556542,
  "profile": {
   "id": "pmvy3vvrk",
   "name": "prueba",
@@ -17,13 +17,13 @@
   },
   {
    "p": "mods/viajeespacial-1.0.0.jar",
-   "size": 561826,
-   "sha1": "ec56edc2b87c6a2cca22cba5ae1bb5bd647c4db1"
+   "size": 561825,
+   "sha1": "fef784a1c0bde62b4994f413de210af19485874f"
   },
   {
    "p": "config/fabric/indigo-renderer.properties",
    "size": 290,
-   "sha1": "4846562668a239114d953cbd238b6c942abfda2e"
+   "sha1": "4a5d926698e99e0916705dda63f56d8e5c74cdba"
   }
  ],
  "external": [],
