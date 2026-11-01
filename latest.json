@@ -1,20 +1,15 @@
 {
- "version": 1793563403,
+ "version": 1793563559,
  "profile": {
-  "id": "pmvy94y8y",
-  "name": "viltrumite",
-  "mc": "1.21.1",
-  "forge": "",
+  "id": "pmvy9egah",
+  "name": "Minecraft 1.20.1",
+  "mc": "1.20.1",
+  "forge": "47.4.28",
   "server": "",
-  "loader": "fabric",
+  "loader": "",
   "fabric": ""
  },
  "files": [
-  {
-   "p": "mods/fabric-api-0.116.17+1.21.1 (1).jar",
-   "size": 2452735,
-   "sha1": "810b2b0195371a012906241d8b85a32a1d6de53c"
-  },
   {
    "p": "mods/TizioSpaceProject-FORGE-1.20.1-v3.4.jar",
    "size": 33031306,
