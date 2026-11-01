@@ -118,7 +118,7 @@ function diagnose(instance, code, extraText = '') {
   if (/Duplicate mods? found|Found duplicate mods|duplicate mod/i.test(text)) return 'Hay mods repetidos en la carpeta mods. Cierra y vuelve a pulsar Jugar (se limpian solos).';
   if (/OutOfMemoryError/.test(text)) return 'Minecraft se quedó sin memoria. Cierra otros programas o ajusta la RAM en Ajustes.';
   if (/UnsupportedClassVersionError|class file version/i.test(text)) return 'La versión de Java no es la correcta para este Minecraft. Borra la carpeta "java" del launcher y pulsa Jugar para bajarla de nuevo.';
-  if (/GLFW error|Failed to create window|WGL|OpenGL|Pixel format/i.test(text)) return 'Tu tarjeta gráfica o sus controladores no son compatibles. Actualiza los drivers de video y vuelve a probar.';
+  if (/GLFW error \d+|Failed to create window|WGL: |driver does not appear to support OpenGL|Pixel format not accelerated|Couldn't set pixel format|GLFW_VERSION_UNAVAILABLE|OpenGL \d(\.\d)? (is )?not supported/i.test(text)) return 'Tu tarjeta gráfica o sus controladores no son compatibles. Actualiza los drivers de video y vuelve a probar.';
   if (/Could not reserve enough space|Invalid maximum heap size/i.test(text)) return 'La RAM configurada no cabe en tu PC. Bájala en Ajustes.';
   const cs = crashSummary(instance);
   if (cs) {
