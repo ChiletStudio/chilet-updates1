@@ -1,5 +1,5 @@
 {
- "version": 1793673168,
+ "version": 1793735888,
  "profile": {
   "id": "pmvy3vvrk",
   "name": "prueba",
@@ -17,8 +17,8 @@
   },
   {
    "p": "mods/viajeespacial-1.0.0.jar",
-   "size": 5409845,
-   "sha1": "03fddda995357eb9cde184a78214d0a8c4ce8ade"
+   "size": 7972762,
+   "sha1": "becc6e0a18f9a151172ad470921e0ae33d786ee7"
   },
   {
    "p": "config/fabric/indigo-renderer.properties",
