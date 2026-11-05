@@ -12,10 +12,32 @@ const ID = /^[A-Za-z0-9_-]{1,40}$/, MC = /^\d+\.\d+(\.\d+)?$/, FORGE = /^\d+(\.\
 // Mods muy pesados con licencia que no permite repartirlos fuera de Modrinth/CurseForge (WaterMedia y sus binarios, 137 MB):
 // NO se suben a GitHub; el manifiesto guarda su sha1 y cada jugador los baja directo de Modrinth.
 const EXTERNAL = /^(watermedia|waterbinaries)/i;
-const MAX_FILE = 95 * 1024 * 1024;
+const MAX_FILE = 95 * 1024 * 1024;                 // límite de la API de contenidos de GitHub (solo sin GitHub conectado)
+// v2.5.0: los archivos pesados (más de 95 MB, hasta 2 GB) se publican como Release Assets de GitHub en vez de dentro del repositorio.
+const RELEASE_TAG = 'chilet-files';
+const RELEASE_MIN = MAX_FILE;                      // hasta 95 MB todo sigue yendo a files/ (los launchers viejos lo siguen recibiendo); lo más pesado, a Releases
+const MAX_ASSET = 2 * 1024 * 1024 * 1024 - 1;      // GitHub: cada asset puede pesar menos de 2 GiB
+const REL_URL = new RegExp('^https://github\\.com/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+/releases/download/' + RELEASE_TAG + '/[0-9a-f]{10}_[A-Za-z0-9._-]{1,200}$');
+const assetName = (sha, rel) => sha.slice(0, 10) + '_' + rel.split('/').pop().replace(/[^A-Za-z0-9._-]/g, '_').slice(0, 200);
 const MR = 'https://api.modrinth.com/v2';
 const MR_HEADERS = { 'User-Agent': 'ChiletStudio/1.2 (launcher)' };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 const sha1 = buf => crypto.createHash('sha1').update(buf).digest('hex');
+// sha1 de un archivo leyéndolo por trozos (los de 1-2 GB no caben en un Buffer)
+function sha1File(abs) {
+  const h = crypto.createHash('sha1'), fd = fs.openSync(abs, 'r'), buf = Buffer.allocUnsafe(8 * 1024 * 1024);
+  try { let n; while ((n = fs.readSync(fd, buf, 0, buf.length, null)) > 0) h.update(buf.subarray(0, n)); } finally { fs.closeSync(fd); }
+  return h.digest('hex');
+}
+// Igual, pero recuerda el resultado mientras el archivo no cambie (tamaño + fecha): publicar de nuevo no vuelve a leer 2 GB.
+function sha1Cached(inst, rel, abs) {
+  const f = path.join(inst, '.chilet-publish-hash.json'); let c = {}; try { c = JSON.parse(fs.readFileSync(f, 'utf8')); } catch { /* sin caché */ }
+  const st = fs.statSync(abs), k = c[rel];
+  if (k && k[0] === st.size && k[1] === st.mtimeMs) return k[2];
+  const h = sha1File(abs); c[rel] = [st.size, st.mtimeMs, h];
+  try { fs.writeFileSync(f, JSON.stringify(c)); } catch { /* no crítico */ }
+  return h;
+}
 const okRel = rel => typeof rel === 'string' && !rel.includes('..') && !path.isAbsolute(rel) && !rel.includes('\\') && (ICONS.includes(rel) || DIRS.includes(rel.split('/')[0]) && rel.includes('/'));
 const inside = (root, p) => { const r = path.relative(root, p); return !!r && !r.startsWith('..') && !path.isAbsolute(r); };
 
@@ -51,14 +73,22 @@ function publish(profile, outDir, extras = {}) {
   fs.rmSync(outDir, { recursive: true, force: true });
   fs.mkdirSync(path.join(outDir, 'files'), { recursive: true });
   const rels = [...DIRS.flatMap(d => walk(path.join(inst, d), inst)), ...ICONS.filter(i => fs.existsSync(path.join(inst, i)))].filter(r => okRel(r) && !/\.(db|log)$/i.test(r));
-  const external = [], skipped = [];
+  const external = [], skipped = [], releaseFiles = [];
+  const gh = extras.gh && extras.gh.user && extras.gh.repo ? extras.gh : null;   // con GitHub conectado, los archivos pesados van como Release Assets
   const files = rels.filter(rel => {
     const abs = path.join(inst, rel), name = rel.split('/').pop();
     if (rel.startsWith('mods/') && EXTERNAL.test(name)) {
       external.push({ filename: name, size: fs.statSync(abs).size, sha1: crypto.createHash('sha1').update(fs.readFileSync(abs)).digest('hex') });
       return false;
     }
-    if (fs.statSync(abs).size > MAX_FILE) { skipped.push(rel); return false; }
+    const size = fs.statSync(abs).size;
+    if (gh && size > RELEASE_MIN) {
+      if (size > MAX_ASSET) { skipped.push(rel); return false; }                   // GitHub no admite 2 GB o más en un solo archivo
+      const h = sha1Cached(inst, rel, abs), asset = assetName(h, rel);
+      releaseFiles.push({ p: rel, abs, size, sha1: h, asset, url: `https://github.com/${gh.user}/${gh.repo}/releases/download/${RELEASE_TAG}/${asset}` });
+      return false;
+    }
+    if (size > MAX_FILE) { skipped.push(rel); return false; }
     return true;
   }).map(rel => {
     const buf = fs.readFileSync(path.join(inst, rel));
@@ -67,13 +97,15 @@ function publish(profile, outDir, extras = {}) {
     return { p: rel, size: buf.length, sha1: sha1(buf) };
   });
   const manifest = { version: Math.floor(Date.now() / 1000), profile: { id: profile.id, name: profile.name, mc: profile.mc, forge: profile.forge || '', server: profile.server || '', loader: profile.loader || '', fabric: profile.fabric || '' }, files, external, social: extras.social || '' };
+  // v2.5.0: archivos pesados como Release Assets. Los launchers viejos ignoran este campo (igual que antes no recibían los de más de 95 MB).
+  if (releaseFiles.length) manifest.release = releaseFiles.map(({ p, size, sha1: h, asset, url }) => ({ p, size, sha1: h, asset, url }));
   if (extras.app) {   // código del launcher firmado: viaja junto al modpack (ver appupdate.js)
     for (const f of extras.app.files) { const dest = path.join(outDir, 'app', ...f.p.split('/')); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.copyFileSync(f.abs, dest); }
     manifest.app = extras.app.a;
   }
   fs.writeFileSync(path.join(outDir, 'events.json'), JSON.stringify(extras.events || []));
   fs.writeFileSync(path.join(outDir, 'latest.json'), JSON.stringify(manifest, null, 1));
-  return { count: files.length, external, skipped };
+  return { count: files.length + releaseFiles.length, external, skipped, releaseFiles };
 }
 
 // CREADOR: comprueba que cada mod "externo" exista en Modrinth (si no, los jugadores no podrían bajarlo).
@@ -99,6 +131,25 @@ async function pool(tasks, n, onStep) {
   if (failed) throw failed;
 }
 
+// Descarga un archivo grande a disco (pasando por .part), comprobando tamaño y sha1; reintenta 3 veces.
+async function downloadBig(url, dest, size, hash, log, label) {
+  const { Readable, Transform } = require('stream'), { pipeline } = require('stream/promises');
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  const tmp = dest + '.part'; let last;
+  for (let i = 0; i < 3; i++) {
+    try {
+      const r = await fetch(url, { signal: AbortSignal.timeout(2 * 3600 * 1000), headers: { 'User-Agent': 'ChiletStudio' } });
+      if (!r.ok || !r.body) throw new Error('HTTP ' + r.status);
+      const h = crypto.createHash('sha1'); let got = 0, lastLog = Date.now();
+      const meter = new Transform({ transform(chunk, enc, cb) { h.update(chunk); got += chunk.length; if (Date.now() - lastLog > 5000) { lastLog = Date.now(); log(`[actualización] ${label}: ${Math.round(got * 100 / Math.max(1, size))}%`); } cb(null, chunk); } });
+      await pipeline(Readable.fromWeb(r.body), meter, fs.createWriteStream(tmp));
+      if (got !== size || h.digest('hex') !== hash) throw new Error('archivo dañado');
+      fs.rmSync(dest, { force: true }); fs.renameSync(tmp, dest);
+      return;
+    } catch (e) { last = e; try { fs.rmSync(tmp, { force: true }); } catch { /* ya no está */ } if (i < 2) await sleep(3000 * (i + 1)); }
+  }
+  throw new Error(`${label}: ${last && last.message}`);
+}
 async function sync(url, log = () => {}, onProgress = null, onExtras = null) {
   const res = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now(), { signal: AbortSignal.timeout(10000), cache: 'no-store' });
   if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -124,7 +175,7 @@ async function sync(url, log = () => {}, onProgress = null, onExtras = null) {
       if (s.size !== size) return false;
       const c = cache[rel];
       if (c && c[0] === s.size && c[1] === s.mtimeMs && c[2] === hash) return true;
-      if (sha1(fs.readFileSync(dest)) !== hash) return false;
+      if ((s.size > 64 * 1024 * 1024 ? sha1File(dest) : sha1(fs.readFileSync(dest))) !== hash) return false;
       cache[rel] = [s.size, s.mtimeMs, hash]; cacheDirty = true; return true;
     } catch { return false; }
   };
@@ -144,6 +195,18 @@ async function sync(url, log = () => {}, onProgress = null, onExtras = null) {
       const buf = Buffer.from(await r.arrayBuffer());
       if (sha1(buf) !== f.sha1) throw new Error(`${f.p}: archivo dañado, se reintentará.`);
       store(f.p, dest, buf, f.sha1);
+    });
+  }
+  // v2.5.0: archivos pesados publicados como Release Assets de GitHub (hasta 2 GB): se bajan por trozos al disco, sin cargarlos en memoria.
+  for (const f of Array.isArray(m.release) ? m.release : []) {
+    if (!okRel(f.p) || !/^[0-9a-f]{40}$/.test(String(f.sha1)) || !Number.isSafeInteger(f.size) || f.size < 0 || !REL_URL.test(String(f.url))) continue;
+    wanted.add(f.p);
+    const dest = path.join(inst, f.p);
+    if (!inside(inst, dest) || isSame(f.p, dest, f.size, f.sha1)) continue;
+    tasks.push(async () => {
+      log(`[actualización] descargando ${f.p} (${Math.round(f.size / 1048576)} MB)…`);
+      await downloadBig(f.url, dest, f.size, f.sha1, log, f.p);
+      const s = fs.statSync(dest); cache[f.p] = [s.size, s.mtimeMs, f.sha1]; cacheDirty = true; changes++;
     });
   }
   // Mods pesados: se bajan de Modrinth (comprobando el sha1 que publicó el creador).
@@ -181,7 +244,6 @@ async function sync(url, log = () => {}, onProgress = null, onExtras = null) {
 }
 // CREADOR: sube la carpeta publicada a tu repositorio de GitHub (solo lo que cambió). cfg = { user, repo, token }
 const API = process.env.CHILET_GH_API || 'https://api.github.com';
-const sleep = ms => new Promise(r => setTimeout(r, ms));
 const gitSha = buf => crypto.createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${buf.length}\0`), buf])).digest('hex');   // el "sha" que GitHub guarda para cada archivo
 async function gh(cfg, method, p, body) {
   let r;
@@ -193,6 +255,7 @@ async function gh(cfg, method, p, body) {
   } catch (e) { throw Object.assign(new Error('No se pudo hablar con GitHub (' + (e?.cause?.code || e?.message || e) + ').'), { status: 0 }); }
   if (r.status === 404 && method === 'GET') return null;
   if (!r.ok) { let t = ''; try { t = (await r.json()).message; } catch { /* sin detalle */ } throw Object.assign(new Error(`GitHub ${r.status}${r.status === 401 ? ' (token inválido)' : r.status === 403 || r.status === 404 ? ' (revisa usuario, repositorio y permisos del token)' : ''}: ${t}`), { status: r.status }); }
+  if (r.status === 204) return {};
   return r.json();
 }
 // Comprueba un token SIN subir nada: ¿GitHub lo acepta y puede escribir en el repositorio?
@@ -210,7 +273,63 @@ async function verifyGithub(cfg) {
   } catch { return { ok: null, msg: 'Guardado, pero no pude comprobarlo ahora (¿sin internet?).' }; }
 }
 const enc = rel => rel.split('/').map(encodeURIComponent).join('/');
-async function upload(cfg, outDir, log = () => {}) {
+const UPLOADS = process.env.CHILET_GH_UPLOAD || 'https://uploads.github.com';
+// Sube UN archivo como asset de la release, leyéndolo del disco por trozos (aguanta casi 2 GB). Avisa del avance.
+function postAsset(cfg, relId, name, abs, size, log) {
+  return new Promise((resolve, reject) => {
+    const u = new URL(`${UPLOADS}/repos/${encodeURIComponent(cfg.user)}/${encodeURIComponent(cfg.repo)}/releases/${relId}/assets?name=${encodeURIComponent(name)}`);
+    const lib = u.protocol === 'http:' ? require('http') : require('https');
+    const req = lib.request(u, { method: 'POST', headers: { Authorization: 'Bearer ' + cfg.token, Accept: 'application/vnd.github+json', 'User-Agent': 'ChiletStudio', 'Content-Type': 'application/octet-stream', 'Content-Length': size, 'X-GitHub-Api-Version': '2022-11-28' } }, res => {
+      let t = ''; res.on('data', c => { t += c; });
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) return resolve();
+        let msg = t; try { msg = JSON.parse(t).message || t; } catch { /* texto plano */ }
+        reject(Object.assign(new Error(`GitHub ${res.statusCode}: ${String(msg).slice(0, 200)}`), { status: res.statusCode }));
+      });
+    });
+    req.setTimeout(240000, () => req.destroy(new Error('GitHub dejó de responder')));   // 4 min SIN avanzar nada
+    req.on('error', e => reject(Object.assign(new Error('se cortó la conexión (' + (e && (e.code || e.message)) + ')'), { status: 0 })));
+    const rs = fs.createReadStream(abs); let sent = 0, last = 0;
+    rs.on('data', c => { sent += c.length; const now = Date.now(); if (now - last > 4000) { last = now; log(`  ${name.slice(11)}: ${(sent / 1048576).toFixed(0)} de ${(size / 1048576).toFixed(0)} MB`); } });
+    rs.on('error', e => req.destroy(e));
+    rs.pipe(req);
+  });
+}
+// Release "chilet-files": la crea si no existe; sube lo que falta (ya subido y completo = se salta) y borra los assets que ya no se usan.
+async function uploadReleaseAssets(cfg, branch, files, log) {
+  let rel = await gh(cfg, 'GET', `/releases/tags/${RELEASE_TAG}`);
+  if (!rel && !files.length) return { uploaded: 0, total: 0 };      // nada pesado y nunca hubo release: no se crea
+  if (!rel) rel = await gh(cfg, 'POST', '/releases', { tag_name: RELEASE_TAG, target_commitish: branch, name: 'Archivos pesados del modpack', body: 'Lo gestiona Chilet Studio: no borres esta release ni sus archivos.', draft: false, prerelease: false, make_latest: 'false' });
+  const listAssets = async () => { const all = []; for (let pg = 1; pg < 50; pg++) { const a = await gh(cfg, 'GET', `/releases/${rel.id}/assets?per_page=100&page=${pg}`); if (!a || !a.length) break; all.push(...a); if (a.length < 100) break; } return all; };
+  let have = await listAssets();
+  let n = 0, up = 0;
+  for (const f of files) {
+    n++;
+    const ok = have.find(a => a.name === f.asset && a.state === 'uploaded' && a.size === f.size);
+    if (ok) continue;
+    let last;
+    for (let i = 0; i < 3; i++) {
+      try {
+        for (const a of have.filter(a => a.name === f.asset)) await gh(cfg, 'DELETE', `/releases/assets/${a.id}`);   // restos de un intento cortado
+        log(`Subiendo archivo pesado ${n}/${files.length}: ${f.p} (${(f.size / 1048576).toFixed(0)} MB)…`);
+        await postAsset(cfg, rel.id, f.asset, f.abs, f.size, log);
+        up++; last = null; break;
+      } catch (e) {
+        last = e;
+        if (i === 2 || !(e.status === 0 || e.status >= 500 || e.status === 422)) break;
+        log(`Se cortó la subida de ${f.p} (${e.message}). Reintentando ${i + 2}/3…`);
+        await sleep(5000 * (i + 1));
+        try { have = await listAssets(); } catch { /* se reintenta igual */ }
+      }
+    }
+    if (last) throw new Error(`${f.p}: ${last.message}. Vuelve a pulsar Publicar: continúa donde se quedó.`);
+    have = await listAssets();
+  }
+  const keep = new Set(files.map(f => f.asset));
+  for (const a of have) if (/^[0-9a-f]{10}_/.test(a.name) && !keep.has(a.name)) { try { await gh(cfg, 'DELETE', `/releases/assets/${a.id}`); } catch { /* no crítico */ } }
+  return { uploaded: up, total: files.length };
+}
+async function upload(cfg, outDir, log = () => {}, releaseFiles = []) {
   const info = await gh(cfg, 'GET', '');
   if (!info) throw new Error('No puedo ver ese repositorio. Revisa usuario y nombre, y que tu token tenga acceso a él (Contents: Read and write).');
   const branch = info.default_branch || 'main';
@@ -253,9 +372,11 @@ async function upload(cfg, outDir, log = () => {}) {
     log(`Subiendo launcher ${++j}/${appTodo.length}: ${f.p}`);
     await put('app/' + f.p, fs.readFileSync(path.join(outDir, 'app', ...f.p.split('/'))), 'Launcher: ' + f.p);
   }
+  // archivos pesados (hasta 2 GB) como Release Assets: ANTES de latest.json, para que nadie vea la lista sin que estén los archivos
+  const ra = await uploadReleaseAssets(cfg, branch, releaseFiles, log);
   await put('events.json', fs.readFileSync(path.join(outDir, 'events.json')), 'Eventos');
   log('Publicando la lista de cambios…');
   await put('latest.json', manifestRaw, 'Nueva versión del modpack');   // al final: así nadie ve la lista antes de que estén los archivos
-  return { uploaded: todo.length, total: files.length, appUploaded: appTodo.length, branch };
+  return { uploaded: todo.length, total: files.length + releaseFiles.length, appUploaded: appTodo.length, releaseUploaded: ra.uploaded, releaseTotal: ra.total, branch };
 }
 module.exports = { fingerprint, publish, sync, upload, verifyExternal, verifyGithub };
