@@ -419,7 +419,8 @@ $('#publishPack').addEventListener('click', async () => {
   setStatus(!r.ok ? r.error : r.manual ? `Listo: ${r.count} archivos en ${r.dir}. Conecta GitHub aquí abajo para que se suba solo.`
     : `Publicado: ${r.uploaded} de ${r.total} archivos subidos. Los jugadores lo reciben al abrir el launcher.`
       + (r.external && r.external.length ? ` (${r.external.length} mod(s) pesado(s) los bajan ellos desde Modrinth.)` : '')
-      + (r.skipped && r.skipped.length ? ` OJO: no se subieron por pesar más de 95 MB: ${r.skipped.join(', ')}.` : ''));
+      + (r.releaseTotal ? ` (${r.releaseTotal} archivo(s) pesado(s) van como Release de GitHub, hasta 2 GB cada uno.)` : '')
+      + (r.skipped && r.skipped.length ? ` OJO: no se subieron por pesar 2 GB o más (el límite de GitHub): ${r.skipped.join(', ')}.` : ''));
 });
 $('#exportPack').addEventListener('click', async () => {
   setStatus('Preparando el modpack para compartir…');
