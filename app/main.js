@@ -300,12 +300,14 @@ async function doPublish(p, say) {
   let appB = null;
   try { appB = appUpdateMod.buildBundle(app.getAppPath(), SHELL); say(appB.changed ? 'Código del launcher: hay cambios, se publica y firma.' : 'Código del launcher: sin cambios.'); }
   catch (e) { say('Aviso: el launcher no se publicó (' + (e?.message || e) + ').'); }
-  const r = remoteMod.publish(p, outDir, { events: readEvents(), social: socialMod.url(), app: appB });
+  const cfg = readPub();
+  const hasGh = !!(cfg.user && cfg.repo && cfg.token);
+  say('Calculando archivos pesados…');
+  const r = remoteMod.publish(p, outDir, { events: readEvents(), social: socialMod.url(), app: appB, gh: hasGh ? { user: cfg.user, repo: cfg.repo } : null });
   say('Comprobando mods pesados en Modrinth…');
   await remoteMod.verifyExternal(r.external);
-  const cfg = readPub();
-  if (!cfg.user || !cfg.repo || !cfg.token) return { ok: true, manual: true, dir: outDir, ...r };
-  const u = await remoteMod.upload(cfg, outDir, say);
+  if (!hasGh) return { ok: true, manual: true, dir: outDir, count: r.count, external: r.external, skipped: r.skipped };
+  const u = await remoteMod.upload(cfg, outDir, say, r.releaseFiles);
   if (u.branch !== cfg.branch) writePub({ ...cfg, branch: u.branch });
   try { const m = readAutoPub(); m[p.id] = fp; fs.writeFileSync(autoPubFile(), JSON.stringify(m)); } catch { /* no crítico */ }
   return { ok: true, manual: false, external: r.external.map(e => e.filename), skipped: r.skipped, ...u };
